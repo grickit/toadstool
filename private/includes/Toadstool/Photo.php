@@ -10,9 +10,9 @@
     protected $_category;
 
 
+    // Create a new Photo object if all we know is a filepath in the uploads folder
     public static function createFromUploadImagePath($parent, $path)
     {
-      // TODO: make sure this is an okay image before we charge ahead
       $photo = new Photo();
       $photo->parent = $parent;
       $photo->originPath = $path;
@@ -27,9 +27,10 @@
       return $photo;
     }
 
+
+    // Create a new Photo object if all we know is a filepath in the preview images folder
     public static function createFromPreviewImagePath($parent, $path)
     {
-      // TODO: make sure this is an okay image and we still have the original
       $photo = new Photo();
       $photo->parent = $parent;
       
@@ -45,9 +46,9 @@
     }
 
 
+    // Create a new Photo object if all we know is a filepath in the big images folder
     public static function createFromBigImagePath($parent, $path)
     {
-      // TODO: make sure this is an okay image and we still have the original
       $photo = new Photo();
       $photo->parent = $parent;
       
@@ -153,6 +154,7 @@
       return "{$this->_parent->archiveImagesPath}/{$this->name}_original";
     }
 
+
     // Any tests we want to do to make sure an image is valid
     public static function testImagePath($path)
     {
@@ -165,22 +167,29 @@
       return true;
     }
 
+
+    // Test the origin image path
     public function testOriginImagePath()
     {
       return Photo::testImagePath($this->originPath);
     }
 
+
+    // Test the big image path
     public function testBigImagePath()
     {
       return PHoto::testImagePath($this->bigImagePath);
     }
 
+
+    // Test the preview image path
     public function testPreviewImagePath()
     {
       return Photo::testPreviewPath($this->previewImagePath);
     }    
 
 
+    // Create and publish a big version of our image
     public function createBigImage()
     {
       // Create a copy of the image for editing
@@ -196,6 +205,7 @@
         $bigImage->profileImage('icc', $profiles['icc']);
 
       // Add watermark
+      // TODO: check that this is a valid ImageMagick object
       if($this->_parent->watermarkObject !== null)
         $bigImage->compositeImage($this->_parent->watermarkObject, \Imagick::COMPOSITE_DEFAULT, \Toadstool\Toadstool::IMAGEWIDTHBIG-$this->_parent->watermarkObject->getImageWidth(), $bigImage->getImageHeight()-$this->_parent->watermarkObject->getImageHeight());
 
@@ -208,6 +218,8 @@
       chmod($this->bigImagePath, 0644);
     }
 
+
+    // Create and publish a preview version of our image
     public function createPreviewImage()
     {
       // Create a copy of the image for editing
@@ -231,6 +243,8 @@
       chmod($this->previewImagePath, 0644);
     }
 
+
+    // Move the original upload file to the archive folder so that it isn't picked up on future runs through the uploads folder
     public function archive()
     {
       // TODO: more errors!
@@ -239,6 +253,7 @@
     }
 
 
+    // WIP code to separate photos by year
     public function getCategory()
     {
       if($this->_category !== null)
@@ -257,6 +272,8 @@
       return $this->_category;
     }
 
+
+    // WIP code to display a thumbnail on the website
     public function createDisplayBlock()
     {
       $output = "<a href=\"images/big/{$this->name}_big.jpeg\" target=\"_blank\" rel=\"noopener noreferrer\">";
