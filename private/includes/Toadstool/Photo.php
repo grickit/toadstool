@@ -113,7 +113,7 @@
     }
 
 
-    // Get or load an ImageMagick object for the originall full size image
+    // Get or load an ImageMagick object for the original full size image
     public function getOriginObject()
     {
       if($this->_originObject !== null)

@@ -24,41 +24,57 @@
       ];
     }
 
+
+    // Get the base path of this application
     public function getBasePath()
     {
       return $this->_paths['base'];
     }
 
+
+    // Get the path of the PHP includes folder
     public function getIncludesPath()
     {
       return $this->_paths['includes'];
     }
 
+
+    // Get the path of the uploaded images folder (photos for processing)
     public function getUploadsPath()
     {
       return $this->_paths['uploads'];
     }
   
+
+    // Get the path of the archived images folder (photos that have already been processed)
     public function getArchiveImagesPath()
     {
       return $this->_paths['archiveImages'];
     }
 
+
+    // Get the path of the big images folder (nobody needs the actual full size images plus we watermark these)
     public function getBigImagesPath()
     {
       return $this->_paths['bigImages'];
     }
 
+
+    // Get the path of the preview images folder (thubmnails make the gallery load faster)
     public function getPreviewImagesPath()
     {
       return $this->_paths['previewImages'];
     }
 
+
+    // Get the path of the watermark image that will be applied to uploaded photos
     public function getWatermarkPath()
     {
       return $this->_paths['watermark'];
     }
 
+
+    // Get or load an ImageMagick object for the watermark image
     public function getWatermarkObject()
     {
       if($this->_watermarkObject !== null)
@@ -68,47 +84,51 @@
       return $this->_watermarkObject;
     }
 
+
+    // Iterate through the uploads folder and do the initial handling of all the ones we find
     public function processUploads()
     {
       foreach(scandir($this->uploadsPath) as $index => $currentUploadPath)
       {
         // We're fine with this running forever, as long as it makes progress
+        // Each iteration of this loop (i.e. each image) gets two seconds to finish processing
         set_time_limit(2);
 
-        // Skip pseudo directories
-        if($currentUploadPath === '.' || $currentUploadPath === '..')
+        // Skip pseudo directories and hidden files (., .., and .gitignore)
+        if(substr($currentUploadPath, 0, 1) === '.')
           continue;
 
-        // Expand the path to the file
-        $currentUploadPath = realpath("{$this->uploadsPath}/{$currentUploadPath}");
+        // Check that the file actually exists within our uploaded images folder
+        if(($currentUploadPath = realpath("{$this->uploadsPath}/{$currentUploadPath}")) === false)
+          throw new \Exception('Uploaded image appears to not actually be accessible within the uploads folder. This could be a permissions issue.');
 
         // Test it for basic jpegness
         if(mime_content_type($currentUploadPath) !== 'image/jpeg')
-        {
-          echo "Skipping invalid file {$currentUploadPath}<br>\n";
-          continue;
-        }
-      
-        echo "Processing image {$currentUploadPath}<br>\n";
+          throw new \Exception('Uploaded image appears not to be a jpeg.');
+
+        // Load the uploaded image into a Photo object, create a thumbnail, and archive it
         $currentUpload = \Toadstool\Photo::createFromUploadImagePath($this, $currentUploadPath);
         $currentUpload->createPreviewImage();
         $currentUpload->archive();
       }
     }
 
+
+    // WIP code to build the gallery based on the preview images folder
     public function processImages()
     {
       $currentCategory = '';
       foreach(scandir($this->previewImagesPath, SCANDIR_SORT_DESCENDING) as $index => $currentImagePath)
       {
-        // Skip pseudo directories
-        if($currentImagePath === '.' || $currentImagePath === '..')
+        // Skip pseudo directories and hidden files (., .., and .gitignore)
+        if(substr($currentImagePath, 0, 1) === '.')
           continue;
 
         // Check that the file actually exists within our preview images folder
         if(($currentImagePath = realpath("{$this->previewImagesPath}/{$currentImagePath}")) === false)
           throw new \Exception('Preview image appears to not actually be accessible within the preview folder. This could be a permissions issue.');
 
+        // Test it for basic jpegness
         if(mime_content_type($currentImagePath) !== 'image/jpeg')
           throw new \Exception('Preview image appears not to be a jpeg.');
 
