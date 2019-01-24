@@ -10,7 +10,7 @@
 
   if(isset($_GET['name']))
   {
-    if(preg_match('/^([0-9]{14}_[A-Z0-9]+_[A-Z0-9]+)_(big|preview)$/', $_GET['name'], $matches))
+    if(preg_match('/^([a-zA-Z0-9]+_[0-9]{14}_[A-Z0-9]+_[A-Z0-9]+)_(big|preview)$/', $_GET['name'], $matches))
     {
       if($matches[2] === 'preview')
       {

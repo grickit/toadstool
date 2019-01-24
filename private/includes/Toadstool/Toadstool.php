@@ -88,29 +88,100 @@
     // Iterate through the uploads folder and do the initial handling of all the ones we find
     public function processUploads()
     {
-      foreach(scandir($this->uploadsPath) as $index => $currentUploadPath)
-      {
-        // We're fine with this running forever, as long as it makes progress
-        // Each iteration of this loop (i.e. each image) gets two seconds to finish processing
-        set_time_limit(2);
+      // Locate all valid objects inside the main uploads directory
+      $mainObjects = $this->processDirectory($this->uploadsPath);
 
+      foreach($mainObjects as $index => $currentMainObjectName)
+      {
+        // Expand the full path
+        $fullMainObjectPath = "{$this->uploadsPath}/{$currentMainObjectName}";
+
+        // Files get processed
+        if(is_file($fullMainObjectPath))
+        {
+          $this->processSingleUpload($fullMainObjectPath, $currentMainObjectName);
+        }
+
+        // We will scan directories for more files, but we explicitly only go one level deep under the main uploads folder
+        elseif(is_dir($fullMainObjectPath))
+        {
+          // Locate all valid objects inside the category folder we just found
+          $categoryObjects = $this->processDirectory("{$this->uploadsPath}/{$currentMainObjectName}");
+
+          foreach($categoryObjects as $index => $currentCategoryObjectName)
+          {
+            // Expand the full path
+            $fullCategoryObjectPath = "{$this->uploadsPath}/{$currentMainObjectName}/{$currentCategoryObjectName}";
+            
+            // Files get processed
+            if(is_file($fullCategoryObjectPath))
+            {
+              $this->processSingleUpload($fullCategoryObjectPath, $currentCategoryObjectName, $currentMainObjectName);
+            }
+
+            // Anything else is problematic
+            else
+            {
+              throw new \Exception('Found non-file in category folder.');
+            }
+          }
+        }
+
+        // Don't think this'll ever get hit, but lol
+        else
+        {
+          throw new \Exception('Found object in uploads folder that was neither a file nor directory?');
+        }
+      }
+    }
+
+
+    // Scandir a folder and return a list of the goodies within
+    protected function processDirectory($path)
+    {
+      $results = [];
+
+      foreach(scandir($path) as $index => $currentObjectName)
+      {
         // Skip pseudo directories and hidden files (., .., and .gitignore)
-        if(substr($currentUploadPath, 0, 1) === '.')
+        if(substr($currentObjectName, 0, 1) === '.')
           continue;
 
-        // Check that the file actually exists within our uploaded images folder
-        if(($currentUploadPath = realpath("{$this->uploadsPath}/{$currentUploadPath}")) === false)
-          throw new \Exception('Uploaded image appears to not actually be accessible within the uploads folder. This could be a permissions issue.');
+        // Check that the file actually exists within our current folder
+        if(($currentUploadPath = realpath("{$path}/{$currentObjectName}")) === false)
+          throw new \Exception('Object appears to not actually be accessible within processed folder. This could be a permissions issue or a security issue. Note that we never allow symlinks.');
 
-        // Test it for basic jpegness
-        if(mime_content_type($currentUploadPath) !== 'image/jpeg')
-          throw new \Exception('Uploaded image appears not to be a jpeg.');
-
-        // Load the uploaded image into a Photo object, create a thumbnail, and archive it
-        $currentUpload = \Toadstool\Photo::createFromUploadImagePath($this, $currentUploadPath);
-        $currentUpload->createPreviewImage();
-        $currentUpload->archive();
+        $results[] = $currentObjectName;
       }
+
+      return $results;
+    }
+
+
+    // Turn a single jpeg file into a Photo object
+    protected function processSingleUpload($fullPath, $name, $category = \Toadstool\Photo::UNCATEGORIZED)
+    {
+      // Each image only gets two seconds to finish processing, but does extend the max execution time by that much
+      set_time_limit(2);
+
+      // Rebuild our path from known good values to make sure we're where we want to be
+      if($category === \Toadstool\Photo::UNCATEGORIZED)
+        $validPath = "{$this->uploadsPath}/{$name}";
+      else
+        $validPath = "{$this->uploadsPath}/{$category}/{$name}";
+      
+      // Check that the file actually exists within our uploaded images folder
+      if(($fullPath = realpath($validPath)) === false)
+        throw new \Exception('Uploaded image appears to not actually be accessible within the uploads folder. This could be a permissions issue.');
+
+      // Test it for basic jpegness
+      if(mime_content_type($fullPath) !== 'image/jpeg')
+        throw new \Exception('Uploaded image appears not to be a jpeg.');
+
+      // Load the uploaded image into a Photo object, create a thumbnail, and archive it
+      $currentUpload = \Toadstool\Photo::createFromUploadImagePath($this, $fullPath, $category);
+      $currentUpload->createPreviewImage();
+      $currentUpload->archive();
     }
 
 
@@ -144,3 +215,4 @@
       }
     }
   }
+  

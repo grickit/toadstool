@@ -9,20 +9,23 @@
     protected $_name;
     protected $_category;
 
+    const UNCATEGORIZED = 'Uncategorized';
+
 
     // Create a new Photo object if all we know is a filepath in the uploads folder
-    public static function createFromUploadImagePath($parent, $path)
+    public static function createFromUploadImagePath($parent, $path, $category = \Toadstool\Photo::UNCATEGORIZED)
     {
       $photo = new Photo();
       $photo->parent = $parent;
       $photo->originPath = $path;
+      $photo->category = preg_replace('/[^a-zA-Z0-9]/', '', $category);
 
       // Generate a new name for this image
       $microtime = microtime(true)*10000;
       $processing_timestamp = base_convert($microtime, 10, 36);
       $modified_timestamp = date('YmdHis', filemtime($path));
       $hash = md5($path);
-      $photo->name = strtoupper("{$modified_timestamp}_{$processing_timestamp}_{$hash}");
+      $photo->name = "{$photo->category}_".strtoupper("{$modified_timestamp}_{$processing_timestamp}_{$hash}");
 
       return $photo;
     }
@@ -34,10 +37,11 @@
       $photo = new Photo();
       $photo->parent = $parent;
       
-      if(preg_match("#^{$parent->previewImagesPath}\/([0-9]{14}_[A-Z0-9]+_[A-Z0-9]+)_preview\.jpeg$#", $path, $matches))
+      if(preg_match("#^{$parent->previewImagesPath}\/(([a-zA-Z0-9]+)_[0-9]{14}_[A-Z0-9]+_[A-Z0-9]+)_preview\.jpeg$#", $path, $matches))
       {
         $photo->originPath = "{$parent->archiveImagesPath}/{$matches[1]}_original";
         $photo->name = $matches[1];
+        $photo->category = $matches[2];
       }
       else
         throw new \Exception("Tried to create Photo from invalid preview image path.");
@@ -52,10 +56,11 @@
       $photo = new Photo();
       $photo->parent = $parent;
       
-      if(preg_match("#^{$parent->bigImagesPath}\/([0-9]{14}_[A-Z0-9]+_[A-Z0-9]+)_big\.jpeg$#", $path, $matches))
+      if(preg_match("#^{$parent->bigImagesPath}\/(([a-zA-Z0-9]+)_[0-9]{14}_[A-Z0-9]+_[A-Z0-9]+)_big\.jpeg$#", $path, $matches))
       {
         $photo->originPath = "{$parent->archiveImagesPath}/{$matches[1]}_original";
         $photo->name = $matches[1];
+        $photo->category = $matches[2];
       }
       else
         throw new \Exception("Tried to create Photo from invalid big image path.");
@@ -103,6 +108,19 @@
     }
 
 
+    // Set the category (once only)
+    public function setCategory($category)
+    {
+      if($this->_category === null)
+      {
+        $this->_category = $category;
+        return true;
+      }
+
+      throw new \Exception('Photo already has category. Cannot set again.');
+    }
+
+
     // Get the path to the original full size image
     public function getOriginPath()
     {
@@ -131,6 +149,16 @@
         return $this->_name;
       
       throw new \Exception('Asked for Photo name but did not have one.');
+    }
+
+
+    // Get the category of the photo
+    public function getCategory()
+    {
+      if($this->_category !== null)
+        return $this->_category;
+      
+      throw new \Exception('Asked for Photo category but did not have one.');
     }
 
 
@@ -249,10 +277,11 @@
     {
       // TODO: more errors!
       rename($this->_originPath, $this->archiveImagePath);
-      chmod($this->archiveImagePath, 0644);
+      //chmod($this->archiveImagePath, 0644);
     }
 
 
+    /*
     // WIP code to separate photos by year
     public function getCategory()
     {
@@ -271,6 +300,7 @@
 
       return $this->_category;
     }
+    */
 
 
     // WIP code to display a thumbnail on the website
@@ -283,3 +313,4 @@
       return $output;
     }
   }
+  
