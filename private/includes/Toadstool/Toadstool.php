@@ -8,6 +8,8 @@
 
     protected $_paths;
     protected $_watermarkObject;
+    protected $_photoObjects = [];
+    protected $_index = [];
 
     public function __construct($basePath)
     {
@@ -160,14 +162,18 @@
     }
 
 
-    // WIP code to build the gallery based on the preview images folder
+    // Iterate through the preview folder and load all our photo objects
     public function processImages()
     {
       $currentCategory = '';
       $previewImageObjects = $this->processDirectory($this->previewImagesPath);
+
       foreach($previewImageObjects['files'] as $currentImageName => $currentImagePath)
       {
         $currentPhoto = \Toadstool\Photo::createFromPreviewImagePath($this, $currentImagePath);
+        $this->_photoObjects[$currentPhoto->name] = $currentPhoto;
+
+        $this->_index['categories'][$currentPhoto->category][] = $currentPhoto->name;
 
         if($currentPhoto->category !== $currentCategory)
         {

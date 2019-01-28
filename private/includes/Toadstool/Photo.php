@@ -8,6 +8,7 @@
     protected $_originObject;
     protected $_name;
     protected $_category;
+    protected $_date;
 
     const UNCATEGORIZED = 'Uncategorized';
 
@@ -19,6 +20,7 @@
       $photo->parent = $parent;
       $photo->originPath = $path;
       $photo->category = preg_replace('/[^a-zA-Z0-9]/', '', $category);
+      $photo->date = date('Y-m-d', filemtime($path));
 
       // Generate a new name for this image
       $microtime = microtime(true)*10000;
@@ -36,16 +38,8 @@
     {
       $photo = new Photo();
       $photo->parent = $parent;
-      
-      if(preg_match("#^{$parent->previewImagesPath}\/(([a-zA-Z0-9]+)_[0-9]{14}_[A-Z0-9]+_[A-Z0-9]+)_preview\.jpeg$#", $path, $matches))
-      {
-        $photo->originPath = "{$parent->archiveImagesPath}/{$matches[1]}_original";
-        $photo->name = $matches[1];
-        $photo->category = $matches[2];
-      }
-      else
-        throw new \Exception("Tried to create Photo from invalid preview image path.");
-
+      $photo->parseFilename($path);
+      $photo->originPath = $photo->archiveImagePath;
       return $photo;
     }
 
@@ -55,17 +49,36 @@
     {
       $photo = new Photo();
       $photo->parent = $parent;
-      
-      if(preg_match("#^{$parent->bigImagesPath}\/(([a-zA-Z0-9]+)_[0-9]{14}_[A-Z0-9]+_[A-Z0-9]+)_big\.jpeg$#", $path, $matches))
+      $photo->parseFilename($path);
+      $photo->originPath = $photo->archiveImagePath;
+      return $photo;
+    }
+
+    public function parseFilename($filename)
+    {
+      if(preg_match("#/(([a-zA-Z0-9]+)_([0-9]{4})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})_([A-Z0-9]+)_([A-Z0-9]+))_(preview|big|original)\.jpeg$#", $filename, $matches))
       {
-        $photo->originPath = "{$parent->archiveImagesPath}/{$matches[1]}_original";
-        $photo->name = $matches[1];
-        $photo->category = $matches[2];
+        /*
+        0:  php
+        1:  overall name
+        2:  category
+        3:  year
+        4:  month
+        5:  day
+        6:  hour
+        7:  minute
+        8:  second
+        9:  processing timestamp
+        10: hash
+        11: size
+        */
+
+        $this->name = $matches[1];
+        $this->category = $matches[2];
+        $this->date = "{$matches[3]}-{$matches[4]}-{$matches[5]}";
       }
       else
-        throw new \Exception("Tried to create Photo from invalid big image path.");
-
-      return $photo;
+        throw new \Exception("Tried parse incorrectly formatted filename.");
     }
 
 
@@ -121,6 +134,19 @@
     }
 
 
+    // Set the date (once only)
+    public function setDate($date)
+    {
+      if($this->_date === null)
+      {
+        $this->_date = $date;
+        return true;
+      }
+
+      throw new \Exception('Photo already has date. Cannot set again.');
+    }
+
+
     // Get the path to the original full size image
     public function getOriginPath()
     {
@@ -162,6 +188,16 @@
     }
 
 
+    // Get the date of the photo
+    public function getdate()
+    {
+      if($this->_date !== null)
+        return $this->_date;
+      
+      throw new \Exception('Asked for Photo date but did not have one.');
+    }
+
+
     // Get the path to the big version of the image
     public function getBigImagePath()
     {
@@ -179,7 +215,7 @@
     // Get the path to the archived full size image
     public function getArchiveImagePath()
     {
-      return "{$this->_parent->archiveImagesPath}/{$this->name}_original";
+      return "{$this->_parent->archiveImagesPath}/{$this->name}_original.jpeg";
     }
 
 
@@ -279,28 +315,6 @@
       rename($this->_originPath, $this->archiveImagePath);
       //chmod($this->archiveImagePath, 0644);
     }
-
-
-    /*
-    // WIP code to separate photos by year
-    public function getCategory()
-    {
-      if($this->_category !== null)
-        return $this->_category;
-
-      if(preg_match('/^([0-9]{8})[0-9]{6}_[A-Z0-9]+_[A-Z0-9]+$/', $this->name, $matches))
-      {
-        $dateTime = \DateTime::createFromFormat('Ymd', $matches[1]);
-        $this->_category = $dateTime->format('F Y');
-      }
-      else
-      {
-        return '';
-      }
-
-      return $this->_category;
-    }
-    */
 
 
     // WIP code to display a thumbnail on the website
