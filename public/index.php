@@ -39,6 +39,6 @@
   else
   {
     $toadstool->processUploads();
-    $toadstool->getIndex();
+    var_dump($toadstool->index);
   }
 ?>

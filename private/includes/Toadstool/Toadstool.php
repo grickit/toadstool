@@ -172,8 +172,8 @@
       }
 
       // Rebuild the index if we had any new photos
-      if($hadNewPhoto === true)
-        $this->buildIndex();
+      if($hadNewPhoto === true && $this->buildIndex() === true)
+        $this->saveIndex();
     }
 
 
@@ -214,6 +214,13 @@
       // Sort the list of all images
       asort($this->_index['all']);
 
+      return true;
+    }
+
+
+    // Save the image index to disk
+    protected function saveIndex()
+    {
       if(($json_index = json_encode($this->_index, JSON_PRETTY_PRINT)) === false)
         throw new \Exception('Failed to JSON encode image index.');
       
@@ -223,19 +230,40 @@
       return true;
     }
 
-    public function getIndex()
-    {
-      // Rebuild the index if we don't have one or it's older than a day
-      if(!is_file($this->indexPath) || (time() - filemtime($this->indexPath) > 86400))
-        $this->buildIndex();
 
+    // Load the image index from disk
+    protected function loadIndex()
+    {
       if(($json_index = file_get_contents($this->indexPath)) === false)
         throw new \Exception('Failed to load image index from disk.');
       
       if(($this->_index = json_decode($json_index, true)) === false)
         throw new Exception('Failed to JSON decode image index.');
-    
-      var_dump($this->_index);
+
+      return true;
+    }
+
+
+    // Conditionally load or rebuild the index
+    public function getIndex()
+    {
+      // We don't already have it loaded
+      if(!count($this->_index))
+      {
+        // But it is ready to go on disk and not older than a day
+        if(time() - filemtime($this->indexPath) < 86400)
+        {
+          $this->loadIndex();
+        }
+        // It doesn't exist on disk or is too old
+        else
+        {
+          $this->buildIndex();
+          $this->saveIndex();
+        }
+      }
+
+      return $this->_index;
     }
   }
   
