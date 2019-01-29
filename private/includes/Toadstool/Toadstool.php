@@ -19,10 +19,11 @@
         'base' => $basePath,
         'includes' => "{$basePath}/private/includes",
         'uploads' => "{$basePath}/private/uploads",
-        'archiveImages' => "{$basePath}/private/archive",
+        'archiveImages' => "{$basePath}/private/runtime/archive",
         'bigImages' => "{$basePath}/public/images/big",
         'previewImages' => "{$basePath}/public/images/preview",
         'watermark' => "{$basePath}/private/watermark.png",
+        'index' => "{$basePath}/private/runtime/index.json",
       ];
     }
 
@@ -73,6 +74,13 @@
     public function getWatermarkPath()
     {
       return $this->_paths['watermark'];
+    }
+
+
+    // Get the path of the image list cache
+    public function getIndexPath()
+    {
+      return $this->_paths['index'];
     }
 
 
@@ -144,10 +152,12 @@
 
       // Locate all valid objects inside the main uploads directory
       $mainObjects = $this->processDirectory($this->uploadsPath);
+      $hadNewPhoto = false;
 
       foreach($mainObjects['files'] as $currentMainObjectName => $currentMainObjectPath)
       {
         $processSingleUpload($currentMainObjectPath, $currentMainObjectName);
+        $hadNewPhoto = true;
       }
 
       foreach($mainObjects['directories'] as $currentMainObjectName => $currentMainObjectPath)
@@ -157,13 +167,18 @@
           foreach($categoryObjects['files'] as $currentCategoryObjectName => $currentCategoryObjectPath)
           {
             $processSingleUpload($currentCategoryObjectPath, $currentCategoryObjectName, $currentMainObjectName);
+            $hadNewPhoto = true;
           }
       }
+
+      // Rebuild the index if we had any new photos
+      if($hadNewPhoto === true)
+        $this->buildIndex();
     }
 
 
     // Iterate through the preview folder and load all our photo objects
-    public function processImages()
+    protected function buildIndex()
     {
       $currentCategory = '';
       $previewImageObjects = $this->processDirectory($this->previewImagesPath);
@@ -174,7 +189,10 @@
         $this->_photoObjects[$currentPhoto->name] = $currentPhoto;
 
         $this->_index['categories'][$currentPhoto->category][] = $currentPhoto->name;
+        $this->_index['dates'][$currentPhoto->yearMonth][] = $currentPhoto->name;
+        $this->_index['all'][] = $currentPhoto->name;
 
+        /*
         if($currentPhoto->category !== $currentCategory)
         {
           $currentCategory = $currentPhoto->category;
@@ -182,7 +200,42 @@
         }
 
         echo $currentPhoto->createDisplayBlock();
+        */
       }
+
+      // Sort inside the categories
+      foreach($this->_index['categories'] as $index => $category)
+        asort($this->_index['categories'][$index]);
+
+      // Sort inside the year months
+      foreach($this->_index['dates'] as $index => $yearmonth)
+        asort($this->_index['dates'][$index]);
+
+      // Sort the list of all images
+      asort($this->_index['all']);
+
+      if(($json_index = json_encode($this->_index, JSON_PRETTY_PRINT)) === false)
+        throw new \Exception('Failed to JSON encode image index.');
+      
+      if(!file_put_contents($this->indexPath, $json_index))
+        throw new \Exception('Failed to save image index to disk.');
+
+      return true;
+    }
+
+    public function getIndex()
+    {
+      // Rebuild the index if we don't have one or it's older than a day
+      if(!is_file($this->indexPath) || (time() - filemtime($this->indexPath) > 86400))
+        $this->buildIndex();
+
+      if(($json_index = file_get_contents($this->indexPath)) === false)
+        throw new \Exception('Failed to load image index from disk.');
+      
+      if(($this->_index = json_decode($json_index, true)) === false)
+        throw new Exception('Failed to JSON decode image index.');
+    
+      var_dump($this->_index);
     }
   }
   

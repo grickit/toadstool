@@ -27,7 +27,7 @@
       $processing_timestamp = base_convert($microtime, 10, 36);
       $modified_timestamp = date('YmdHis', filemtime($path));
       $hash = md5($path);
-      $photo->name = "{$photo->category}_".strtoupper("{$modified_timestamp}_{$processing_timestamp}_{$hash}");
+      $photo->name = "{$modified_timestamp}_{$photo->category}_".strtoupper("{$processing_timestamp}_{$hash}");
 
       return $photo;
     }
@@ -56,26 +56,26 @@
 
     public function parseFilename($filename)
     {
-      if(preg_match("#/(([a-zA-Z0-9]+)_([0-9]{4})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})_([A-Z0-9]+)_([A-Z0-9]+))_(preview|big|original)\.jpeg$#", $filename, $matches))
+      if(preg_match("#/(([0-9]{4})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})_([a-zA-Z0-9]+)_([A-Z0-9]+)_([A-Z0-9]+))_(preview|big|original)\.jpeg$#", $filename, $matches))
       {
         /*
         0:  php
         1:  overall name
-        2:  category
-        3:  year
-        4:  month
-        5:  day
-        6:  hour
-        7:  minute
-        8:  second
+        2:  year
+        3:  month
+        4:  day
+        5:  hour
+        6:  minute
+        7:  second
+        8:  category
         9:  processing timestamp
         10: hash
         11: size
         */
 
         $this->name = $matches[1];
-        $this->category = $matches[2];
-        $this->date = "{$matches[3]}-{$matches[4]}-{$matches[5]}";
+        $this->category = $matches[8];
+        $this->date = "{$matches[2]}-{$matches[3]}-{$matches[4]}";
       }
       else
         throw new \Exception("Tried parse incorrectly formatted filename.");
@@ -189,7 +189,7 @@
 
 
     // Get the date of the photo
-    public function getdate()
+    public function getDate()
     {
       if($this->_date !== null)
         return $this->_date;
@@ -197,6 +197,11 @@
       throw new \Exception('Asked for Photo date but did not have one.');
     }
 
+    public function getYearMonth()
+    {
+      $datetime = \DateTime::createFromFormat('Y-m-d', $this->date);
+      return $datetime->format('F Y');
+    }
 
     // Get the path to the big version of the image
     public function getBigImagePath()

@@ -39,6 +39,6 @@
   else
   {
     $toadstool->processUploads();
-    $toadstool->processImages();
+    $toadstool->getIndex();
   }
 ?>
