@@ -29,7 +29,7 @@
     <div class="container">
       <div class="gallery">
       <?php
-        foreach($index['all'] as $i => $name)
+        foreach(array_reverse($index['all']) as $i => $name)
         {
           $this->render('_thumbnail', ['name' => $name]);
         }

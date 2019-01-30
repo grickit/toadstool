@@ -103,6 +103,8 @@ div.card.photo {
 	margin: 0.275em;
 	padding: 0;
 	border: 1px solid #AAAAAA;
+	background-repeat: no-repeat;
+	background-color: #AAAAAA;
 }
 
 div.card.photo > a {
