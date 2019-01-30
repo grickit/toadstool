@@ -12,6 +12,22 @@
 
     const UNCATEGORIZED = 'Uncategorized';
 
+    /*
+    0:  php
+    1:  overall name
+    2:  year
+    3:  month
+    4:  day
+    5:  hour
+    6:  minute
+    7:  second
+    8:  category
+    9:  processing timestamp
+    10: hash
+    11: size
+    */
+    const NAMEREGEX = '#/(([0-9]{4})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})_([a-zA-Z0-9]+)_([A-Z0-9]+)_([A-Z0-9]+))_(preview|big|original)\.jpeg$#';
+
 
     // Create a new Photo object if all we know is a filepath in the uploads folder
     public static function createFromUploadImagePath($parent, $path, $category = \Toadstool\Photo::UNCATEGORIZED)
@@ -54,25 +70,23 @@
       return $photo;
     }
 
+
+    // Create a new Photo object if all we know is the name
+    public static function createFromName($parent, $path)
+    {
+      $photo = new Photo();
+      $photo->parent = $parent;
+      $photo->parseFilename("/{$path}_original.jpeg");
+      $photo->originPath = $photo->archiveImagePath;
+      return $photo;
+    }
+
+
+    // Extract what information we can from a photo name (while validating it)
     public function parseFilename($filename)
     {
-      if(preg_match("#/(([0-9]{4})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})_([a-zA-Z0-9]+)_([A-Z0-9]+)_([A-Z0-9]+))_(preview|big|original)\.jpeg$#", $filename, $matches))
+      if(preg_match(Photo::NAMEREGEX, $filename, $matches))
       {
-        /*
-        0:  php
-        1:  overall name
-        2:  year
-        3:  month
-        4:  day
-        5:  hour
-        6:  minute
-        7:  second
-        8:  category
-        9:  processing timestamp
-        10: hash
-        11: size
-        */
-
         $this->name = $matches[1];
         $this->category = $matches[8];
         $this->date = "{$matches[2]}-{$matches[3]}-{$matches[4]}";
@@ -254,7 +268,7 @@
     // Test the preview image path
     public function testPreviewImagePath()
     {
-      return Photo::testPreviewPath($this->previewImagePath);
+      return Photo::testImagePath($this->previewImagePath);
     }    
 
 
@@ -319,17 +333,6 @@
       // TODO: more errors!
       rename($this->_originPath, $this->archiveImagePath);
       //chmod($this->archiveImagePath, 0644);
-    }
-
-
-    // WIP code to display a thumbnail on the website
-    public function createDisplayBlock()
-    {
-      $output = "<a href=\"images/big/{$this->name}_big.jpeg\" target=\"_blank\" rel=\"noopener noreferrer\">";
-      $output .= "<img src=\"images/preview/{$this->name}_preview.jpeg\">";
-      $output .= '<a/>';
-
-      return $output;
     }
   }
   

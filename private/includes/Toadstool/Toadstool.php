@@ -22,6 +22,7 @@
         'archiveImages' => "{$basePath}/private/runtime/archive",
         'bigImages' => "{$basePath}/public/images/big",
         'previewImages' => "{$basePath}/public/images/preview",
+        'views' => "{$basePath}/private/views",
         'watermark' => "{$basePath}/private/watermark.png",
         'index' => "{$basePath}/private/runtime/index.json",
       ];
@@ -69,6 +70,12 @@
       return $this->_paths['previewImages'];
     }
 
+    
+    public function getViewsPath()
+    {
+      return $this->_paths['views'];
+    }
+
 
     // Get the path of the watermark image that will be applied to uploaded photos
     public function getWatermarkPath()
@@ -98,7 +105,7 @@
     // Scandir a folder and return lists of the goodies within
     protected function processDirectory($path)
     {
-      $results = [];
+      $results = ['files' => [], 'directories' => []];
 
       foreach(scandir($path) as $index => $currentObjectName)
       {
@@ -264,6 +271,49 @@
       }
 
       return $this->_index;
+    }
+
+
+    // Stream an image file to the web browser
+    public function servePhoto($name)
+    {
+      if(preg_match(\Toadstool\Photo::NAMEREGEX, $name, $matches))
+      {
+        $photo = \Toadstool\Photo::createFromName($this, $matches[1]);
+
+        if($matches[11] === 'preview' && !$photo->testPreviewImagePath())
+        {
+          $photo->createPreviewImage();
+          $filepath = $photo->previewImagePath;
+        }
+
+        if($matches[11] === 'big' && !$photo->testBigImagePath())
+        {
+          $photo->createBigImage();
+          $filepath = $photo->bigImagePath;
+        }
+      }
+    
+      if(isset($filepath))
+      {
+        header('Content-Type: image/jpeg');
+        header('Content-Length: '. filesize($filepath));
+        readfile($filepath);
+        exit;
+      }
+      else
+      {
+        header('HTTP/1.1 401 Unauthorized');
+        exit;
+      }
+    }
+
+    public function render($zzz_viewfilename, $params = [])
+    {
+      extract($params);
+      // TODO: validate
+      require "{$this->viewsPath}/{$zzz_viewfilename}.php";
+      return true;
     }
   }
   
