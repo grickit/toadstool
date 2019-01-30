@@ -12,9 +12,15 @@
       <div class="content">
         <a href="/" class="brand">toad.photos</a>
         <nav>
-          <a href="/article/view/about">About</a></li>
-          <a href="/things">Things</a></li>
-          <a href="/articles">Articles</a></li>
+          <a href="/all">All Photos</a>
+          <?php
+            foreach($index['categories'] as $name => $category)
+            {
+              if($name !== 'Uncategorized')
+                echo "<a href=\"/category/{$name}\">{$name}</a>";
+            }
+          ?>
+          <a href="/category/Uncategorized">Other</a>
         </nav>
       </div>
     </div>
@@ -33,8 +39,9 @@
   </div>
   <footer class="footer">
     <div class="container">
-      <p class="pull-left">&copy; Derek Hoagland <?php echo date('Y'); ?></p>
-      <p class="pull-right">Powered by Toadstool</p>
+      <p style="margin-bottom: 4em;">High quality original photos available upon request and approval.</p>
+      <p>&copy; <?php echo date('Y'); ?> Derek Hoagland </p>
+      <p>Powered by <a href="https://github.com/grickit/toadstool">Toadstool</a></p>
     </div>
   </footer>
 </body>

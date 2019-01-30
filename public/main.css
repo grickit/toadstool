@@ -6,7 +6,7 @@ body {
   margin: 0;
   padding: 0;
 
-  font-size: 14px;
+  font-size: 16px;
   font-family: Arial, sans-serif
 }
 
@@ -28,10 +28,60 @@ footer {
 #main {
   display: table-row;
   height: 100%;
+  background-color: #3E2C1E;
+}
+
+nav {
+	font-size: 1.25em;
+	margin-top: 2em;
+}
+
+nav a {
+	display: inline-block;
+	height: 2em;
+	padding: 0.25em 2em 0.25em 2em;
+}
+
+nav a:hover {
+	background-color: #735F4B;
+	color: #FFFFFF;
+}
+
+nav a:active {
+	color: red;
+}
+
+a, a:link, a:visited {
+	color: #9BA77D;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #637134;
+}
+
+a:active {
+	color: red;
+}
+
+a.brand {
+	color: #8A575E;
+	font-weight: bold;
+	font-size: 3em;
+	text-decoration: none;
+}
+
+header {
+	background: #3E2C1E;
+}
+
+footer {
+	background: #735F4B;
+	color: #EAEAEA;
 }
 
 .container {
-  max-width: 1500px;
+  max-width: 1750px;
   min-width: 320px;
 
   margin-left: auto;
@@ -50,7 +100,7 @@ div.card.photo {
 	display: inline-block;
 	width: 240px;
 	height: 160px;
-	margin: 5px;
+	margin: 0.275em;
 	padding: 0;
 	border: 1px solid #AAAAAA;
 }
@@ -61,15 +111,8 @@ div.card.photo > a {
 	height: 100%;
 }
 
-.container {
-	max-width: 1800px;
-	width: 100%;
-	margin-left: auto;
-	margin-right: auto;
-	text-align: center;
-}
-
 .gallery {
 	line-height: 0px;
 	text-align: center;
+	margin-bottom: 2em;
 }
