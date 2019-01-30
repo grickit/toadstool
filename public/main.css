@@ -1,0 +1,12 @@
+* {
+	box-sizing: border-box;
+}
+
+.card.photo {
+	display: inline-block;
+	width: 240px;
+	height: 160px;
+	margin: 3px;
+	padding: 0;
+	border: 1px solid #AAAAAA;
+}
