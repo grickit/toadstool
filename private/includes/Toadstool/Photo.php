@@ -294,7 +294,7 @@
 
       // Compress slightly
       $bigImage->setImageCompression(\Imagick::COMPRESSION_JPEG);
-      $bigImage->setImageCompressionQuality(99);
+      $bigImage->setImageCompressionQuality(97);
 
       // Save
       $bigImage->writeImage($this->bigImagePath);
