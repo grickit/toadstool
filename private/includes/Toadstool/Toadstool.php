@@ -275,23 +275,20 @@
 
 
     // Stream an image file to the web browser
-    public function servePhoto($name)
+    public function servePhoto($name, $size)
     {
-      if(preg_match(\Toadstool\Photo::NAMEREGEX, $name, $matches))
+      $photo = \Toadstool\Photo::createFromName($this, $name);
+
+      if($size === 'preview' && !$photo->testPreviewImagePath())
       {
-        $photo = \Toadstool\Photo::createFromName($this, $matches[1]);
+        $photo->createPreviewImage();
+        $filepath = $photo->previewImagePath;
+      }
 
-        if($matches[11] === 'preview' && !$photo->testPreviewImagePath())
-        {
-          $photo->createPreviewImage();
-          $filepath = $photo->previewImagePath;
-        }
-
-        if($matches[11] === 'big' && !$photo->testBigImagePath())
-        {
-          $photo->createBigImage();
-          $filepath = $photo->bigImagePath;
-        }
+      if($size === 'big' && !$photo->testBigImagePath())
+      {
+        $photo->createBigImage();
+        $filepath = $photo->bigImagePath;
       }
     
       if(isset($filepath))
