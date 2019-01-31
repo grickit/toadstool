@@ -11,7 +11,13 @@
 
   if(preg_match('#^/category/([A-Za-z0-9]+)$#', $route, $matches))
   {
+    if(isset($_GET['offset']) && is_numeric($_GET['offset']))
+      $offset = $_GET['offset'];
+    else
+      $offset = 0;
 
+    $toadstool->processUploads();
+    $toadstool->render('gallery', ['photos' => array_reverse($toadstool->index['categories'][$matches[1]]), 'offset' => $offset]);
   }
   elseif(preg_match('#^/images/(original|big|preview)/[A-Za-z0-9_]+\.jpeg$#', $route) && preg_match(\Toadstool\Photo::NAMEREGEX, $_SERVER['REQUEST_URI'], $matches))
   {
