@@ -4,7 +4,4 @@ RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 # Otherwise forward the request to index.php
-
-#RewriteRule ^images/(big|preview)/([0-9]{14}_[a-zA-Z0-9]+_[A-Z0-9]+_[A-Z0-9]+)_(big|preview).jpeg$ index.php?name=/$2_$1.jpeg
-
 RewriteRule . /index.php
