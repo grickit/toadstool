@@ -305,11 +305,19 @@
       }
     }
 
+    public function renderPartial($zzz_viewfilename, $params = [])
+    {
+      // TODO: validate
+      extract($params);
+      require "{$this->viewsPath}/{$zzz_viewfilename}.php";
+      return true;
+    }
+
     public function render($zzz_viewfilename, $params = [])
     {
-      extract($params);
-      // TODO: validate
-      require "{$this->viewsPath}/{$zzz_viewfilename}.php";
+      $this->renderPartial('header');
+      $this->renderPartial($zzz_viewfilename, $params);
+      $this->renderPartial('footer');
       return true;
     }
   }

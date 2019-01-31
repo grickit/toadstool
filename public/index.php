@@ -18,7 +18,7 @@
   elseif($_SERVER['REQUEST_URI'] === '/' || $_SERVER['REQUEST_URI'] === '')
   {
     $toadstool->processUploads();
-    $toadstool->render('home', ['index' => $toadstool->index]);
+    $toadstool->render('home');
   }
   else
   {
