@@ -7,18 +7,25 @@
 
   $toadstool = new \Toadstool\Toadstool(realpath(__DIR__.'/..'));
 
-  if(preg_match('#^/category/([A-Za-z0-9]+)$#', $_SERVER['REQUEST_URI'], $matches))
+  $route = preg_replace('/\?.+$/', '', $_SERVER['REQUEST_URI']);
+
+  if(preg_match('#^/category/([A-Za-z0-9]+)$#', $route, $matches))
   {
 
   }
-  elseif(preg_match('#^/images/(original|big|preview)/[A-Za-z0-9_]+\.jpeg$#', $_SERVER['REQUEST_URI']) && preg_match(\Toadstool\Photo::NAMEREGEX, $_SERVER['REQUEST_URI'], $matches))
+  elseif(preg_match('#^/images/(original|big|preview)/[A-Za-z0-9_]+\.jpeg$#', $route) && preg_match(\Toadstool\Photo::NAMEREGEX, $_SERVER['REQUEST_URI'], $matches))
   {
     $toadstool->servePhoto($matches[1], $matches[11]);
   }
-  elseif($_SERVER['REQUEST_URI'] === '/' || $_SERVER['REQUEST_URI'] === '')
+  elseif($route === '/' || $route === '')
   {
+    if(isset($_GET['offset']) && is_numeric($_GET['offset']))
+      $offset = $_GET['offset'];
+    else
+      $offset = 0;
+
     $toadstool->processUploads();
-    $toadstool->render('home');
+    $toadstool->render('gallery', ['photos' => array_reverse($toadstool->index['all']), 'offset' => $offset]);
   }
   else
   {
