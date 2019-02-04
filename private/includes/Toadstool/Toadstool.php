@@ -196,7 +196,7 @@
         $this->_photoObjects[$currentPhoto->name] = $currentPhoto;
 
         $this->_index['categories'][$currentPhoto->category][] = $currentPhoto->name;
-        $this->_index['dates'][$currentPhoto->yearMonth][] = $currentPhoto->name;
+        $this->_index['dates'][$currentPhoto->fancyDate][] = $currentPhoto->name;
         $this->_index['all'][] = $currentPhoto->name;
 
         /*
@@ -215,11 +215,15 @@
         asort($this->_index['categories'][$index]);
 
       // Sort inside the year months
-      foreach($this->_index['dates'] as $index => $yearmonth)
+      foreach($this->_index['dates'] as $index => $fancyDate)
         asort($this->_index['dates'][$index]);
 
       // Sort the list of all images
       asort($this->_index['all']);
+
+      // We display newest first most of the time
+      $this->_index['dates'] = array_reverse($this->_index['dates']);
+      $this->_index['all'] = array_reverse($this->_index['all']);
 
       return true;
     }

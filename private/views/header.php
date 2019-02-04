@@ -12,7 +12,7 @@
       <div class="content">
         <a href="/" class="brand">toad.photos</a>
         <nav>
-          <a href="/all">All Photos</a>
+          <a href="/latest">Latest Photos</a>
           <?php
             foreach($this->index['categories'] as $name => $category)
             {

@@ -72,6 +72,13 @@ a.brand {
 	text-decoration: none;
 }
 
+h1 {
+	margin-bottom: 0.25em;
+	margin-top: 3em;
+	color: #9BA77D;
+	border-bottom: 1px solid #FFFFFF;
+}
+
 .clear {
 	clear: both;
 }

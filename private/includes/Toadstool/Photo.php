@@ -211,10 +211,10 @@
       throw new \Exception('Asked for Photo date but did not have one.');
     }
 
-    public function getYearMonth()
+    public function getFancyDate()
     {
       $datetime = \DateTime::createFromFormat('Y-m-d', $this->date);
-      return $datetime->format('F Y');
+      return $datetime->format('F jS Y');
     }
 
     // Get the path to the big version of the image

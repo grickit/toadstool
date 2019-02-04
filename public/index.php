@@ -17,7 +17,17 @@
       $offset = 0;
 
     $toadstool->processUploads();
-    $toadstool->render('gallery', ['photos' => array_reverse($toadstool->index['categories'][$matches[1]]), 'offset' => $offset]);
+    $toadstool->render('category', ['photos' => array_reverse($toadstool->index['categories'][$matches[1]]), 'offset' => $offset, 'category' => $matches[1]]);
+  }
+  elseif(preg_match('#^/latest$#', $route))
+  {
+    if(isset($_GET['offset']) && is_numeric($_GET['offset']))
+      $offset = $_GET['offset'];
+    else
+      $offset = 0;
+
+    $toadstool->processUploads();
+    $toadstool->render('photos_by_date', ['photos' => $toadstool->index['dates'], 'offset' => $offset]);
   }
   elseif(preg_match('#^/images/(original|big|preview)/[A-Za-z0-9_]+\.jpeg$#', $route) && preg_match(\Toadstool\Photo::NAMEREGEX, $_SERVER['REQUEST_URI'], $matches))
   {
