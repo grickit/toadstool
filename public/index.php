@@ -4,6 +4,7 @@
     require __DIR__ . '/../private/includes/' . str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
   }
   spl_autoload_register('ToadstoolAutoloader', true, true);
+  \Imagick::setRegistry('temporary-path', sys_get_temp_dir());
 
   $toadstool = new \Toadstool\Toadstool(realpath(__DIR__.'/..'));
 
