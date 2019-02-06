@@ -4,12 +4,21 @@
     require __DIR__ . '/../private/includes/' . str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
   }
   spl_autoload_register('ToadstoolAutoloader', true, true);
+
+
+  // Make ImageMagick respect PHP's temp directory settings
   \Imagick::setRegistry('temporary-path', sys_get_temp_dir());
 
+
+  // Initialize out Toadstool project
   $toadstool = new \Toadstool\Toadstool(realpath(__DIR__.'/..'));
 
+
+  // Parse the URL
   $route = preg_replace('/\?.+$/', '', $_SERVER['REQUEST_URI']);
 
+
+  // Determmine what page to load
   if(preg_match('#^/category/([A-Za-z0-9]+)$#', $route, $matches))
   {
     if(isset($_GET['offset']) && is_numeric($_GET['offset']))
