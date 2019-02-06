@@ -40,20 +40,23 @@
       // Try to get the date the photo was taken
       if(($exifData = exif_read_data($path)) !== false && is_array($exifData) && isset($exifData['DateTimeOriginal']))
       {
-        $photo->date = date('Y-m-d', strtotime($exifData['DateTimeOriginal']));
+        $timestamp = strtotime($exifData['DateTimeOriginal']);
+
       }
       // Otherwise just use the last modified date on the file
       else
       {
-        $photo->date = date('Y-m-d', filemtime($path));
+        $timestamp = filemtime($path);
       }
+
+      $photo->date = date('Y-m-d', $timestamp);
+      $timestamp = date('YmdHis', $timestamp);
 
       // Generate a new name for this image
       $microtime = microtime(true)*10000;
       $processing_timestamp = base_convert($microtime, 10, 36);
-      $modified_timestamp = date('YmdHis', filemtime($path));
       $hash = md5($path);
-      $photo->name = "{$modified_timestamp}_{$photo->category}_".strtoupper("{$processing_timestamp}_{$hash}");
+      $photo->name = "{$timestamp}_{$photo->category}_".strtoupper("{$processing_timestamp}_{$hash}");
 
       return $photo;
     }
