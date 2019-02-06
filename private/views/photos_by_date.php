@@ -1,7 +1,7 @@
 <div class="gallery">
 <?php
 
-  $limit = 20;
+  $limit = 10;
   $renderPrevious = false;
   $renderNext = false;
 
@@ -23,10 +23,10 @@
       if($i === 0 && $offset > 0)
       {
         if($offset > $limit)
-          $this->renderPartial('_thumbnail_button', ['page' => 'newest', 'offset' => ($offset - $limit), 'imageURL' => '/images/previous.png']);
+          $this->renderPartial('_thumbnail_button', ['page' => 'latest', 'offset' => ($offset - $limit), 'imageURL' => '/images/previous.png']);
         
         elseif($offset != 0)
-          $this->renderPartial('_thumbnail_button', ['page' => 'newest', 'offset' => 0, 'imageURL' => '/images/previous.png']);
+          $this->renderPartial('_thumbnail_button', ['page' => 'latest', 'offset' => 0, 'imageURL' => '/images/previous.png']);
       }
 
       foreach($datePhotos as $index => $name)
@@ -35,6 +35,6 @@
   }
 
   if(array_shift($photos) !== null)
-    $this->renderPartial('_thumbnail_button', ['page' => 'newest', 'offset' => ($offset+$i), 'imageURL' => '/images/next.png']);
+    $this->renderPartial('_thumbnail_button', ['page' => 'latest', 'offset' => ($offset+$i), 'imageURL' => '/images/next.png']);
 ?>
 </div>
