@@ -36,7 +36,17 @@
       $photo->parent = $parent;
       $photo->originPath = $path;
       $photo->category = preg_replace('/[^a-zA-Z0-9]/', '', $category);
-      $photo->date = date('Y-m-d', filemtime($path));
+
+      // Try to get the date the photo was taken
+      if(($exifData = exif_read_data($path)) !== false && is_array($exifData) && isset($exifData['DateTimeOriginal']))
+      {
+        $photo->date = date('Y-m-d', strtotime($exifData['DateTimeOriginal']));
+      }
+      // Otherwise just use the last modified date on the file
+      else
+      {
+        $photo->date = date('Y-m-d', filemtime($path));
+      }
 
       // Generate a new name for this image
       $microtime = microtime(true)*10000;
