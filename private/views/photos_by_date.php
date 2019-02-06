@@ -16,7 +16,7 @@
     reset($photos);
     $fancyDate = key($photos);
     $datePhotos = array_shift($photos);
-    if(count($datePhotos))
+    if(is_array($datePhotos))
     {
       echo "<h1>{$fancyDate}</h1>";
 
