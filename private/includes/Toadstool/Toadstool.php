@@ -198,16 +198,6 @@
         $this->_index['categories'][$currentPhoto->category][] = $currentPhoto->name;
         $this->_index['dates'][$currentPhoto->fancyDate][] = $currentPhoto->name;
         $this->_index['all'][] = $currentPhoto->name;
-
-        /*
-        if($currentPhoto->category !== $currentCategory)
-        {
-          $currentCategory = $currentPhoto->category;
-          echo "<h1 id=\"{$currentCategory}\"><a href=\"#{$currentCategory}\">{$currentCategory}</a></h1>";
-        }
-
-        echo $currentPhoto->createDisplayBlock();
-        */
       }
 
       // Sort inside the categories

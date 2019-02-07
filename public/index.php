@@ -5,6 +5,15 @@
   }
   spl_autoload_register('ToadstoolAutoloader', true, true);
 
+  set_exception_handler(function($exception) {
+    echo '<div style="max-width: 1000px; margin: 20px auto 0 auto; font-family: Arial, sans-serif; font-size: 20px;">';
+    echo '<h1 style="color: #AA0000; font-weight: bold;">An error occurred!</h1>';
+    echo '<p>';
+    echo $exception->getMessage();
+    echo '</p>';
+    echo '</div>';
+  });
+
 
   // Make ImageMagick respect PHP's temp directory settings
   \Imagick::setRegistry('temporary-path', sys_get_temp_dir());
