@@ -8,8 +8,8 @@
 
   // Pretty print errors
   set_exception_handler(function($exception) {
-    echo '<div style="max-width: 1000px; margin: 20px auto 0 auto; font-family: Arial, sans-serif; font-size: 20px;">';
-    echo '<h1 style="color: #AA0000; font-weight: bold;">An error occurred!</h1>';
+    echo '<div style="max-width: 1000px; margin: 20px auto 0 auto; font-family: Arial, sans-serif; font-size: 20px; background-image: url(\'/images/toad_wires.png\'); background-repeat: no-repeat; background-position: right -1%; background-color: #EAEAEA; padding: 1em; background-size: auto 100%; border-radius: 3px; min-height: 300px;">';
+    echo '<h1 style="color: #AA0000; font-weight: bold; margin-top: 0;">An error occurred!</h1>';
     echo '<p>';
     echo $exception->getMessage();
     echo '</p>';
