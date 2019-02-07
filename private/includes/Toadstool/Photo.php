@@ -300,9 +300,8 @@
       if(!empty($profiles))
         $bigImage->profileImage('icc', $profiles['icc']);
 
-      // Add watermark
-      // TODO: check that this is a valid ImageMagick object
-      if($this->_parent->watermarkObject !== null)
+      // Add watermark if we have a valid one
+      if(get_class($this->_parent->watermarkObject) === 'Imagick')
         $bigImage->compositeImage($this->_parent->watermarkObject, \Imagick::COMPOSITE_DEFAULT, \Toadstool\Toadstool::IMAGEWIDTHBIG-$this->_parent->watermarkObject->getImageWidth(), $bigImage->getImageHeight()-$this->_parent->watermarkObject->getImageHeight());
 
       // Compress slightly
