@@ -5,6 +5,8 @@
   }
   spl_autoload_register('ToadstoolAutoloader', true, true);
 
+
+  // Pretty print errors
   set_exception_handler(function($exception) {
     echo '<div style="max-width: 1000px; margin: 20px auto 0 auto; font-family: Arial, sans-serif; font-size: 20px;">';
     echo '<h1 style="color: #AA0000; font-weight: bold;">An error occurred!</h1>';
@@ -19,42 +21,62 @@
   \Imagick::setRegistry('temporary-path', sys_get_temp_dir());
 
 
-  // Initialize out Toadstool project
-  $toadstool = new \Toadstool\Toadstool(realpath(__DIR__.'/..'));
+  // Actually route the request
+  (function() {
+    // Initialize out Toadstool project
+    $toadstool = new \Toadstool\Toadstool(realpath(__DIR__.'/..'));
 
+    // Default routing parameters
+    $page = null;
+    $category = null;
+    $offset = 0;
+    $process = false;
 
-  // Parse the URL
-  $route = preg_replace('/\?.+$/', '', $_SERVER['REQUEST_URI']);
+    // Override routing parameters
+    if(isset($_GET['page']) && preg_match('/^([A-Za-z0-9]+)$/', $_GET['page']))
+      $page = $_GET['page'];
 
+    if(isset($_GET['category']) && preg_match('/^([A-Za-z0-9]+)$/', $_GET['category']))
+    {
+      $page = 'category';
+      $category = $_GET['category'];
+    }
 
-  // Determmine what page to load
-  if(preg_match('#^/category/([A-Za-z0-9]+)$#', $route, $matches))
-  {
     if(isset($_GET['offset']) && is_numeric($_GET['offset']))
       $offset = $_GET['offset'];
-    else
-      $offset = 0;
 
-    $toadstool->processUploads();
-    $toadstool->render('category', ['photos' => array_reverse($toadstool->index['categories'][$matches[1]]), 'offset' => $offset, 'category' => $matches[1]]);
-  }
-  elseif($route === '/' || $route === '' || preg_match('#^/latest$#', $route))
-  {
-    if(isset($_GET['offset']) && is_numeric($_GET['offset']))
-      $offset = $_GET['offset'];
-    else
-      $offset = 0;
+    if(isset($_GET['process']))
+      $toadstool->processUploads();
 
-    $toadstool->processUploads();
-    $toadstool->render('photos_by_date', ['photos' => $toadstool->index['dates'], 'offset' => $offset]);
-  }
-  elseif(preg_match('#^/images/(original|big|preview)/[A-Za-z0-9_]+\.jpeg$#', $route) && preg_match(\Toadstool\Photo::NAMEREGEX, $_SERVER['REQUEST_URI'], $matches))
-  {
-    $toadstool->servePhoto($matches[1], $matches[11]);
-  }
-  else
-  {
-    header('HTTP/1.1 404 Not Found');
-    exit;
-  }
+
+    // Determmine what page to load
+    // Image files
+    if(preg_match(\Toadstool\Photo::NAMEREGEX, $_SERVER['REQUEST_URI'], $matches))
+    {
+      $toadstool->servePhoto($matches[1], $matches[11]);
+    }
+
+    // Latest photos
+    elseif($page === null || $page === 'latest')
+    {
+      $toadstool->render('photos_by_date', ['photos' => $toadstool->index['dates'], 'offset' => $offset]);
+    }
+
+    // Category page
+    elseif($page === 'category')
+    {
+      if(!isset($toadstool->index['categories'][$category]) || !is_array($toadstool->index['categories'][$category]))
+        throw new \Exception('Tried to visit nonexistent category.');
+
+      $toadstool->render('category', ['photos' => array_reverse($toadstool->index['categories'][$category]), 'offset' => $offset, 'category' => $category]);
+    }
+
+    // Something else?
+    else
+    {
+      header('HTTP/1.1 404 Not Found');
+      exit;
+    }
+  })();
+
 ?>
