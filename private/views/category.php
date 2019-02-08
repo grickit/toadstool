@@ -1,8 +1,9 @@
-<h1><?php echo "Photos of {$category}"; ?></h1>
 <div class="gallery">
+<h1><?php echo "Photos of {$category}"; ?></h1>
+<div class="photos">
 <?php
 
-  $limit = 35;
+  $limit = 36;
   $renderNext = false;
 
   if($offset > 0)
@@ -33,4 +34,5 @@
   if($renderNext === true)
     $this->renderPartial('_thumbnail_button', ['page' => "category/{$category}", 'offset' => $i, 'imageURL' => '/images/next.png']);
 ?>
+</div>
 </div>

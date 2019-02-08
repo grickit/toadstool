@@ -19,6 +19,7 @@
     if(is_array($datePhotos))
     {
       echo "<h1>{$fancyDate}</h1>";
+      echo '<div class="photos">';
 
       if($i === 0 && $offset > 0)
       {
@@ -31,10 +32,15 @@
 
       foreach($datePhotos as $index => $name)
         $this->renderPartial('_thumbnail', ['name' => $name]);
+      
+      // Check if we're on the last section so that we can print the button card before we close the photos div
+      if($i+1 == $limit && array_shift($photos) !== null)
+        $this->renderPartial('_thumbnail_button', ['page' => 'latest', 'offset' => ($offset+$i), 'imageURL' => '/images/next.png']);
+      
+      echo '</div>';
     }
   }
 
-  if(array_shift($photos) !== null)
-    $this->renderPartial('_thumbnail_button', ['page' => 'latest', 'offset' => ($offset+$i), 'imageURL' => '/images/next.png']);
+
 ?>
 </div>

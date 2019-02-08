@@ -1,3 +1,6 @@
+/* ===== ===== ===== ========= ===== ===== ===== */
+/* ===== ===== ===== STRUCTURE ===== ===== ===== */
+/* ===== ===== ===== ========= ===== ===== ===== */
 html,
 body {
   display: table;
@@ -8,6 +11,10 @@ body {
 
   font-size: 16px;
   font-family: Arial, sans-serif
+}
+
+body {
+	background-color: #3E2C1E;
 }
 
 * {
@@ -28,7 +35,66 @@ footer {
 #main {
   display: table-row;
   height: 100%;
-  background-color: #3E2C1E;
+}
+
+.container {
+	max-width: 1600px;
+	min-width: 320px;
+  
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	text-align: center;
+  }
+  
+.container > * {
+	text-align: left;
+}
+
+
+
+/* ===== ===== ===== ============= ===== ===== ===== */
+/* ===== ===== ===== TAG OVERRIDES ===== ===== ===== */
+/* ===== ===== ===== ============= ===== ===== ===== */
+h1 {
+	margin: 0;
+	color: #9BA77D;
+}
+
+.clear {
+	clear: both;
+}
+
+
+
+/* ===== ===== ===== ===== ===== ===== ===== */
+/* ===== ===== ===== LINKS ===== ===== ===== */
+/* ===== ===== ===== ===== ===== ===== ===== */
+a, a:link, a:visited {
+	color: #9BA77D;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #637134;
+}
+
+a:active {
+	color: red;
+}
+
+
+
+/* ===== ===== ===== ====== ===== ===== ===== */
+/* ===== ===== ===== HEADER ===== ===== ===== */
+/* ===== ===== ===== ====== ===== ===== ===== */
+a.brand {
+	color: #8A575E;
+	font-weight: bold;
+	font-size: 3em;
+  text-decoration: none;
+  display: block;
+  margin: 0.1em 0.5em;
 }
 
 nav {
@@ -52,69 +118,72 @@ nav a:active {
 	color: red;
 }
 
-a, a:link, a:visited {
-	color: #9BA77D;
-	text-decoration: none;
-}
-
-a:hover {
-	color: #637134;
-}
-
-a:active {
-	color: red;
-}
-
-a.brand {
-	color: #8A575E;
-	font-weight: bold;
-	font-size: 3em;
-	text-decoration: none;
-}
-
-h1 {
-	margin-bottom: 0.25em;
-	margin-top: 3em;
-	color: #9BA77D;
-	border-bottom: 1px solid #FFFFFF;
-}
-
-.clear {
-	clear: both;
-}
-
 header {
-	background: #3E2C1E;
+  background: #3E2C1E;;
 }
 
+
+
+/* ===== ===== ===== ====== ===== ===== ===== */
+/* ===== ===== ===== FOOTER ===== ===== ===== */
+/* ===== ===== ===== ====== ===== ===== ===== */
 footer {
 	background: #735F4B;
 	color: #EAEAEA;
 }
 
-.container {
-  max-width: 1750px;
-  min-width: 320px;
 
-  margin-left: auto;
-  margin-right: auto;
-  position: relative;
-  text-align: center;
 
-  padding: 0;
+/* ===== ===== ===== ==== ===== ===== ===== */
+/* ===== ===== ===== MAIN ===== ===== ===== */
+/* ===== ===== ===== ==== ===== ===== ===== */
+#main {
+  background-color: #F0F0F0;
+  background-image: url('/images/background-tile.png');
+  background-attachment: fixed;
 }
 
-.container > * {
-  text-align: left;
+#main > .container > *:first-child {
+  padding: 1em;
+  border: 1px solid #AAAAAA;
+  background-color: #FAFAFA;
+  box-shadow: 5px 1px 2px -2px rgba(0, 0, 0, 0.5), -5px 0.5px 2px -2px rgba(0, 0, 0, 0.5);
+  margin: 1em 0 2em 0;
+}
+
+
+
+/* ===== ===== ===== ====== ===== ===== ===== */
+/* ===== ===== ===== PHOTOS ===== ===== ===== */
+/* ===== ===== ===== ====== ===== ===== ===== */
+.gallery {
+	min-height: 510px;
+}
+
+.gallery > h1 {
+  border-bottom: 1px solid #92A2A4;
+  margin-top: 2em;
+  margin-bottom: 0.25em;
+  color: #92A2A4;
+  font-size: 250%;
+  font-weight: bold;
+}
+
+.gallery > h1:first-child {
+  margin-top: 0;
+}
+
+.gallery .photos {
+  line-height: 0; /* Horrible hack to fix the extra vertical space between rows of photos. */
 }
 
 div.card {
 	display: inline-block;
 	width: 240px;
 	height: 160px;
-	margin: 0.275em;
+	margin: 0.3em;
 	padding: 0;
-	border: 1px solid #AAAAAA;
+	border: 1px solid #111111;
 	background-repeat: no-repeat;
 	background-position: center;
 	background-color: #AAAAAA;
@@ -123,16 +192,8 @@ div.card {
 div.card > a {
 	display: block;
 	width: 100%;
-	height: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-.gallery {
-	line-height: 0;
-	text-align: justify;
-	margin-bottom: 2em;
-	min-height: 510px;
-}
-
-.gallery * {
-	line-height: 1em;
-}
