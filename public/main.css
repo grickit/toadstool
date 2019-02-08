@@ -129,7 +129,11 @@ header {
 /* ===== ===== ===== ====== ===== ===== ===== */
 footer {
 	background: #735F4B;
-	color: #EAEAEA;
+  color: #EAEAEA;
+  background-image: url('/images/grickit_tie_watermark.png');
+  background-repeat: no-repeat;
+  background-position: top right;
+  background-size: auto 50%;
 }
 
 footer > .container > *

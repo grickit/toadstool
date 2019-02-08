@@ -2,9 +2,10 @@
         </div>
         <footer class="footer">
             <div class="container">
-                <p style="margin-bottom: 4em;">High quality original photos available upon request and approval.</p>
+                <p>High quality original photos available upon request and approval.</p>
+                <p style="margin-bottom: 3em;"><a href="https://twitter.com/grickit" target="_blank" rel="noopener noreferrer">Twitter</a> &bull; <a href="https://www.instagram.com/grickit" target="_blank" rel="noopener noreferrer">Instagram</a> &bull; <a href="https://www.github.com/grickit" target="_blank" rel="noopener noreferrer">Github</a></p>
                 <p>&copy; <?php echo date('Y'); ?> Derek Hoagland </p>
-                <p>Powered by <a href="https://github.com/grickit/toadstool">Toadstool</a></p>
+                <p>Powered by <a href="https://github.com/grickit/toadstool" target="_blank" rel="noopener noreferrer">Toadstool</a></p>
             </div>
         </footer>
     </body>
