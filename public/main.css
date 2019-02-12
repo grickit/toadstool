@@ -21,6 +21,12 @@ body {
   box-sizing: border-box;
 }
 
+* {
+  transition: color 0.25s linear,
+    background-color 0.25s linear,
+    background-image 0.25s linear;
+}
+
 header {
   display: table-row;
   width: 100%;
@@ -56,11 +62,6 @@ footer {
 /* ===== ===== ===== ============= ===== ===== ===== */
 /* ===== ===== ===== TAG OVERRIDES ===== ===== ===== */
 /* ===== ===== ===== ============= ===== ===== ===== */
-h1 {
-	margin: 0;
-	color: #9BA77D;
-}
-
 .clear {
 	clear: both;
 }
@@ -71,16 +72,17 @@ h1 {
 /* ===== ===== ===== LINKS ===== ===== ===== */
 /* ===== ===== ===== ===== ===== ===== ===== */
 a, a:link, a:visited {
-	color: #9BA77D;
+	color: #92A2A4;
 	text-decoration: none;
 }
 
 a:hover {
-	color: #637134;
+	color: #637335;
 }
 
 a:active {
-	color: red;
+  color: #8A575E;
+  transition: none;
 }
 
 
@@ -111,11 +113,12 @@ nav a {
 
 nav a:hover {
 	background-color: #735F4B;
-	color: #FFFFFF;
+	color: #FAFAFA;
 }
 
 nav a:active {
-	color: red;
+  color: #8A575E;
+  transition: none;
 }
 
 header {
@@ -128,8 +131,8 @@ header {
 /* ===== ===== ===== FOOTER ===== ===== ===== */
 /* ===== ===== ===== ====== ===== ===== ===== */
 footer {
-	background: #735F4B;
-  color: #EAEAEA;
+	background: #3E2C1E;
+  color: #FAFAFA;
   background-image: url('/images/grickit_tie_watermark.png');
   background-repeat: no-repeat;
   background-position: top right;
@@ -171,15 +174,16 @@ footer > .container > *
 
 .gallery > h1 {
   border-bottom: 1px solid #92A2A4;
-  margin-top: 2em;
+  margin-top: 0.75em;
   margin-bottom: 0.25em;
   color: #92A2A4;
   font-size: 250%;
   font-weight: bold;
 }
 
-.gallery > h1:first-child {
-  margin-top: 0;
+.gallery .photos + h1
+{
+  margin-top: 1.5em;
 }
 
 .gallery .photos {
@@ -206,3 +210,39 @@ div.card > a {
   padding: 0;
 }
 
+.control.page {
+  user-select: none;
+  background-color: #92A2A4;
+  border: 1px solid #92A2A4;
+  color: #FAFAFA;
+  border-radius: 4px;
+  padding: 0.75em;
+  font-weight: bold;
+}
+
+.control.page:hover {
+  background-color: #FAFAFA;
+  border: 1px solid #92A2A4;
+  color: #92A2A4;
+}
+
+.control.page:not(.disabled):active {
+  background-color: #FAFAFA;
+  border: 1px solid #8A575E;
+  color: #8A575E;
+  transition: none;
+}
+
+.control.page.disabled {
+  background-color: #666666;
+  border: 1px solid #666666;
+  color: #BBBBBB;
+}
+
+.control.page.next {
+  float: right;
+}
+
+.control.page.previous {
+  float: left;
+}

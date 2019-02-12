@@ -8,5 +8,8 @@
                 <p>Powered by <a href="https://github.com/grickit/toadstool" target="_blank" rel="noopener noreferrer">Toadstool</a></p>
             </div>
         </footer>
+
+        <!-- This empty script tag is a fix for this nonsense bug in Chrome https://bugs.chromium.org/p/chromium/issues/detail?id=332189 -->
+        <script> </script>
     </body>
 </html>
