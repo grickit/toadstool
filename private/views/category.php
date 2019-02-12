@@ -1,38 +1,37 @@
 <div class="gallery">
-<h1><?php echo "Photos of {$category}"; ?></h1>
-<div class="photos">
 <?php
-
   $limit = 36;
+  $renderPrevious = false;
   $renderNext = false;
 
   if($offset > 0)
   {
+    $renderPrevious = true;
     if($offset > $limit)
-      $this->renderPartial('_thumbnail_button', ['page' => "category/{$category}", 'offset' => ($offset - $limit), 'imageURL' => '/images/previous.png']);
-    
+      $previousOffset = ($offset - $limit);
     elseif($offset != 0)
-      $this->renderPartial('_thumbnail_button', ['page' => "category/{$category}", 'offset' => 0, 'imageURL' => '/images/previous.png']);
-
-    // We'll display one less image on this page due to the previous button
-    $limit--;
+      $previousOffset = 0;
   }
 
-  if(isset($photos[$offset+$limit]))
+  if(count($photos) >= $offset+$limit)
   {
-    $limit--;
     $renderNext = true;
+    $nextOffset = $offset+$limit;
   }
 
-
+  $this->renderPartial('_page_controls', ['page' => "/category/{$category}", 'renderNext' => $renderNext, 'renderPrevious' => $renderPrevious, 'nextOffset' => $nextOffset, 'previousOffset' => $previousOffset]);
+?>
+<h1><?php echo "Photos of {$category}"; ?></h1>
+<div class="photos">
+<?php
   for($i = $offset; ($i-$offset) < $limit; $i++)
   {
     if(isset($photos[$i]))
       $this->renderPartial('_thumbnail', ['name' => $photos[$i]]);
   }
-
-  if($renderNext === true)
-    $this->renderPartial('_thumbnail_button', ['page' => "category/{$category}", 'offset' => $i, 'imageURL' => '/images/next.png']);
 ?>
 </div>
+<?php
+  $this->renderPartial('_page_controls', ['page' => "/category/{$category}", 'renderNext' => $renderNext, 'renderPrevious' => $renderPrevious, 'nextOffset' => $nextOffset, 'previousOffset' => $previousOffset]);
+?>
 </div>

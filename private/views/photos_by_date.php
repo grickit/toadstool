@@ -25,7 +25,7 @@
     $nextOffset = $offset+$limit;
   }
 
-  $this->renderPartial('_page_controls', ['renderNext' => $renderNext, 'renderPrevious' => $renderPrevious, 'nextOffset' => $nextOffset, 'previousOffset' => $previousOffset]);
+  $this->renderPartial('_page_controls', ['page' => 'latest', 'renderNext' => $renderNext, 'renderPrevious' => $renderPrevious, 'nextOffset' => $nextOffset, 'previousOffset' => $previousOffset]);
 
   for($i = 0; $i < $limit; $i++)
   {
@@ -61,7 +61,7 @@
     }
   }
 
-  $this->renderPartial('_page_controls', ['renderNext' => $renderNext, 'renderPrevious' => $renderPrevious, 'nextOffset' => $nextOffset, 'previousOffset' => $previousOffset]);
+  $this->renderPartial('_page_controls', ['page' => 'latest', 'renderNext' => $renderNext, 'renderPrevious' => $renderPrevious, 'nextOffset' => $nextOffset, 'previousOffset' => $previousOffset]);
 
 ?>
 </div>
