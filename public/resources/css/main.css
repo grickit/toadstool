@@ -22,9 +22,9 @@ body {
 }
 
 * {
-  transition: color 0.25s linear,
-    background-color 0.25s linear,
-    background-image 0.25s linear;
+  transition: color 0.1s linear,
+    background-color 0.1s linear,
+    background-image 0.1s linear;
 }
 
 header {
