@@ -5,6 +5,8 @@ RewriteRule ^category/([A-Za-z0-9]+)$ /index.php?category=$1 [QSA,L]
 
 RewriteRule ^process$ /index.php?process [L]
 
+RewriteRule ^latest$ /index.php?page=latest [QSA,L]
+
 # If a directory or a file exists, use the request directly
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

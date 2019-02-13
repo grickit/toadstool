@@ -1,12 +1,12 @@
 <?php
 if($renderPrevious === true)
-  echo "<a href=\"{$page}?offset={$previousOffset}\" class=\"control page previous\">Previous page</a>";
+  echo "<a href=\"{$page}?offset={$previousOffset}\" class=\"button page previous\">Previous page</a>";
 else
-  echo '<span class="control page previous disabled">Previous page</span>';
+  echo '<span class="button page previous disabled">Previous page</span>';
 
 if($renderNext === true)
-  echo "<a href=\"{$page}?offset={$nextOffset}\" class=\"control page next\">Next page</a>";
+  echo "<a href=\"{$page}?offset={$nextOffset}\" class=\"button page next\">Next page</a>";
 else
-  echo "<span class=\"control page next disabled\">Next page</span>";
+  echo "<span class=\"button page next disabled\">Next page</span>";
 ?>
 <div class="clear"></div>

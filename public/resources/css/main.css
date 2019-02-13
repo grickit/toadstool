@@ -62,6 +62,13 @@ footer {
 /* ===== ===== ===== ============= ===== ===== ===== */
 /* ===== ===== ===== TAG OVERRIDES ===== ===== ===== */
 /* ===== ===== ===== ============= ===== ===== ===== */
+h1 {
+  margin: 0 0 0.25em 0;
+  font-size: 260%;
+  color: #637335;
+  border-bottom: 1px solid #637335;
+}
+
 .clear {
 	clear: both;
 }
@@ -107,7 +114,7 @@ nav {
 nav a {
 	display: inline-block;
 	height: 2em;
-	padding: 0.4em 2em 0.25em 2em;
+	padding: 0.4em 1.8em 0.25em 1.8em;
 	margin: 5px;
 }
 
@@ -172,17 +179,16 @@ footer > .container > *
 	min-height: 510px;
 }
 
-.gallery > h1 {
-  border-bottom: 1px solid #92A2A4;
-  margin-top: 0.75em;
-  margin-bottom: 0.25em;
+.gallery > h2 {
+  margin-top: 0.5em;
+  margin-bottom: 0.1em;
   color: #92A2A4;
-  font-size: 250%;
+  font-size: 220%;
   font-weight: bold;
 }
 
-.gallery .photos + h1
-{
+.gallery .photos + h2,
+.card.category + h1 {
   margin-top: 1.5em;
 }
 
@@ -192,14 +198,12 @@ footer > .container > *
 
 div.card {
 	display: inline-block;
-	width: 240px;
-	height: 160px;
-	margin: 0.3em;
 	padding: 0;
 	border: 1px solid #111111;
 	background-repeat: no-repeat;
 	background-position: center;
-	background-color: #AAAAAA;
+  background-color: #AAAAAA;
+  background-size: 100%;
 }
 
 div.card > a {
@@ -210,7 +214,33 @@ div.card > a {
   padding: 0;
 }
 
-.control.page {
+div.card.photo {
+	width: 240px;
+  height: 160px;
+	margin: 0.3em;
+}
+
+div.card.category {
+  width: 255px;
+  height: 215px;
+  padding: 0.2em;
+  line-height: 0;
+  margin: 0.3em;
+  background-color: #FAFAFA;
+}
+
+div.card.category div.card.photo {
+  width: 120px;
+  height: 80px;
+  margin: 0.1em;
+  border: 0;
+}
+
+.floating-controls {
+  float: right;
+}
+
+.button, .button:link, .button:visited {
   user-select: none;
   background-color: #92A2A4;
   border: 1px solid #92A2A4;
@@ -218,31 +248,28 @@ div.card > a {
   border-radius: 4px;
   padding: 0.75em;
   font-weight: bold;
+  display: inline-block;
 }
 
-.control.page:hover {
+.button + .button {
+  margin-left: 10px;
+}
+
+.button:hover {
   background-color: #FAFAFA;
   border: 1px solid #92A2A4;
   color: #92A2A4;
 }
 
-.control.page:not(.disabled):active {
+.button:not(.disabled):active {
   background-color: #FAFAFA;
   border: 1px solid #8A575E;
   color: #8A575E;
   transition: none;
 }
 
-.control.page.disabled {
+.button.disabled {
   background-color: #666666;
   border: 1px solid #666666;
   color: #BBBBBB;
-}
-
-.control.page.next {
-  float: right;
-}
-
-.control.page.previous {
-  float: left;
 }

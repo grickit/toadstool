@@ -2,7 +2,7 @@
   if(!count($photos))
     return;
 ?>
-<h1><?php echo $date; ?></h1>
+<h2><?php echo $date; ?></h2>
 <div class="photos">
 <?php
   foreach($photos as $index => $name)

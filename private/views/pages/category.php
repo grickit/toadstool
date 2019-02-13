@@ -1,6 +1,6 @@
 <div class="gallery">
 <?php
-  $limit = 36;
+  $limit = 24;
   $renderPrevious = false;
   $renderNext = false;
 
@@ -18,9 +18,10 @@
     $renderNext = true;
     $nextOffset = $offset+$limit;
   }
-
-  $this->renderPartial('fragments/pagination', ['page' => "/category/{$category}", 'renderNext' => $renderNext, 'renderPrevious' => $renderPrevious, 'nextOffset' => $nextOffset, 'previousOffset' => $previousOffset]);
 ?>
+<div class="floating-controls">
+<?php $this->renderPartial('fragments/pagination', ['page' => "/category/{$category}", 'renderNext' => $renderNext, 'renderPrevious' => $renderPrevious, 'nextOffset' => $nextOffset, 'previousOffset' => $previousOffset]); ?>
+</div>
 <h1><?php echo "Photos of {$category}"; ?></h1>
 <div class="photos">
 <?php

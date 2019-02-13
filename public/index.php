@@ -57,7 +57,11 @@
     }
 
     // Latest photos
-    elseif($page === null || $page === 'latest')
+    elseif($page === null)
+    {
+      $toadstool->render('pages/home');
+    }
+    elseif($page === 'latest')
     {
       $toadstool->render('pages/photos_by_date', ['photos' => $toadstool->index['dates'], 'offset' => $offset]);
     }

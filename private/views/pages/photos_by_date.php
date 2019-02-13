@@ -6,7 +6,7 @@
     array_shift($photos);
   }
 
-  $limit = 10;
+  $limit = 5;
   $renderPrevious = false;
   $renderNext = false;
   $nextOffset = null;
@@ -26,9 +26,12 @@
     $renderNext = true;
     $nextOffset = $offset+$limit;
   }
-
-  $this->renderPartial('fragments/pagination', ['page' => 'latest', 'renderNext' => $renderNext, 'renderPrevious' => $renderPrevious, 'nextOffset' => $nextOffset, 'previousOffset' => $previousOffset]);
-
+?>
+<div class="floating-controls">
+<?php $this->renderPartial('fragments/pagination', ['page' => 'latest', 'renderNext' => $renderNext, 'renderPrevious' => $renderPrevious, 'nextOffset' => $nextOffset, 'previousOffset' => $previousOffset]); ?>
+</div>
+<h1>Latest Photos</h1>
+<?php
   for($i = 0; $i < $limit; $i++)
   {
     reset($photos);
@@ -36,6 +39,5 @@
   }
 
   $this->renderPartial('fragments/pagination', ['page' => 'latest', 'renderNext' => $renderNext, 'renderPrevious' => $renderPrevious, 'nextOffset' => $nextOffset, 'previousOffset' => $previousOffset]);
-
 ?>
 </div>
