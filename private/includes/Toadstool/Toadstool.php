@@ -198,6 +198,12 @@
         $this->_index['categories'][$currentPhoto->category][] = $currentPhoto->name;
         $this->_index['dates'][$currentPhoto->fancyDate][] = $currentPhoto->name;
         $this->_index['all'][] = $currentPhoto->name;
+
+        // We only count these so that we might sort by the counts later
+        if(!isset($this->_index['category_counts'][$currentPhoto->category]))
+          $this->_index['category_counts'][$currentPhoto->category] = 0;
+
+        $this->_index['category_counts'][$currentPhoto->category]++;
       }
 
       // Sort inside the categories
@@ -214,6 +220,9 @@
       // We display newest first most of the time
       $this->_index['dates'] = array_reverse($this->_index['dates']);
       $this->_index['all'] = array_reverse($this->_index['all']);
+
+      // Sort the category counts array biggest to smallest
+      arsort($this->_index['category_counts']);
 
       return true;
     }
@@ -309,9 +318,9 @@
 
     public function render($zzz_viewfilename, $params = [])
     {
-      $this->renderPartial('header');
+      $this->renderPartial('template/header');
       $this->renderPartial($zzz_viewfilename, $params);
-      $this->renderPartial('footer');
+      $this->renderPartial('template/footer');
       return true;
     }
   }

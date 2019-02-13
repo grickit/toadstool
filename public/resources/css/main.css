@@ -133,7 +133,7 @@ header {
 footer {
 	background: #3E2C1E;
   color: #FAFAFA;
-  background-image: url('/images/grickit_tie_watermark.png');
+  background-image: url('/resources/images/grickit_tie_watermark.png');
   background-repeat: no-repeat;
   background-position: top right;
   background-size: auto 50%;
@@ -151,7 +151,7 @@ footer > .container > *
 /* ===== ===== ===== ==== ===== ===== ===== */
 #main {
   background-color: #F0F0F0;
-  background-image: url('/images/background-tile.png');
+  background-image: url('/resources/images/background-tile.png');
   background-attachment: fixed;
 }
 

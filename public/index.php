@@ -59,7 +59,7 @@
     // Latest photos
     elseif($page === null || $page === 'latest')
     {
-      $toadstool->render('photos_by_date', ['photos' => $toadstool->index['dates'], 'offset' => $offset]);
+      $toadstool->render('pages/photos_by_date', ['photos' => $toadstool->index['dates'], 'offset' => $offset]);
     }
 
     // Category page
@@ -68,7 +68,7 @@
       if(!isset($toadstool->index['categories'][$category]) || !is_array($toadstool->index['categories'][$category]))
         throw new \Exception('Tried to visit nonexistent category.');
 
-      $toadstool->render('category', ['photos' => array_reverse($toadstool->index['categories'][$category]), 'offset' => $offset, 'category' => $category]);
+      $toadstool->render('pages/category', ['photos' => array_reverse($toadstool->index['categories'][$category]), 'offset' => $offset, 'category' => $category]);
     }
 
     // Something else?
