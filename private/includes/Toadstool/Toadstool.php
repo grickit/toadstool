@@ -10,6 +10,7 @@
     protected $_watermarkObject;
     protected $_photoObjects = [];
     protected $_index = [];
+    protected $_config = [];
 
     public function __construct($basePath)
     {
@@ -25,6 +26,7 @@
         'views' => "{$basePath}/private/views",
         'watermark' => "{$basePath}/private/watermark.png",
         'index' => "{$basePath}/private/runtime/index.json",
+        'config' => "{$basePath}/private/config.php"
       ];
     }
 
@@ -88,6 +90,23 @@
     public function getIndexPath()
     {
       return $this->_paths['index'];
+    }
+
+
+    // Get the path of the config file
+    public function getConfigPath()
+    {
+      return $this->_paths['config'];
+    }
+
+
+    // Return the config for the site
+    public function getConfig()
+    {
+      if($this->_config === [])
+        $this->_config = require_once($this->configPath);
+
+      return $this->_config;
     }
 
 

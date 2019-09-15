@@ -1,26 +1,39 @@
+<?php
+  $sitename = $this->config['sitename'];
+  $description = $this->config['description'];
+  $url = $this->config['preferred_base_url'];
+  $image_url = $this->config['preview']['image']['url'];
+  $image_type = $this->config['preview']['image']['mimetype'];
+  $image_width = $this->config['preview']['image']['width'];
+  $image_height = $this->config['preview']['image']['height'];
+  $image_caption = $this->config['preview']['image']['caption'];
+?>
 <!DOCTYPE html>
 <html>
   <head>
-    <title>toad.photos</title>
+    <title><?php echo $sitename; ?></title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://toad.photos/resources/toadcuddles.jpeg" />
-    <meta property="og:image:secure_url" content="https://toad.photos/resources/toadcuddles.jpeg" />
-    <meta property="og:image:type" content="image/jpeg" />
-    <meta property="og:image:width" content="2000" />
-    <meta property="og:image:height" content="1333" />
-    <meta property="og:image:alt" content="Two of my pet toads cuddling under dripping water." />
-    <meta property="og:title" content="toad dot photos" />
-    <meta property="og:description" content="Photo gallery for my pet toads plus their supporting flora and fauna." />
-    <meta property="og:url" content="https://toad.photos/" />
+    <meta property="og:title" content="<?php echo $sitename; ?>" />
+    <meta property="og:description" content="<?php echo $description; ?>" />
+    <meta property="og:url" content="<?php echo $url; ?>" />
+
+    <meta property="og:image" content="<?php echo $image_url; ?>" />
+    <meta property="og:image:secure_url" content="<?php echo $image_url; ?>" />
+    <meta property="og:image:type" content="<?php echo $image_type; ?>" />
+    <meta property="og:image:width" content="<?php echo $image_width; ?>" />
+    <meta property="og:image:height" content="<?php echo $image_height; ?>" />
+    <meta property="og:image:alt" content="<?php echo $image_caption; ?>" />
+
     <link rel="stylesheet" type="text/css" media="screen" href="/resources/css/main.css?version=<?php echo filemtime("{$this->basePath}/public/resources/css/main.css"); ?>" />
   </head>
 <body>
   <header class="header">
     <div class="container">
       <div class="content">
-        <a href="/" class="brand">toad.photos</a>
+        <a href="/" class="brand"><?php echo $sitename; ?></a>
+        <!-- <span class="description"><?php echo $description; ?></span> -->
         <nav>
           <a href="/">Home</a>
           <a href="/latest">All Photos</a>
