@@ -11,6 +11,7 @@
     protected $_photoObjects = [];
     protected $_index = [];
     protected $_config = [];
+    protected $_storage;
 
     public function __construct($basePath)
     {
@@ -118,6 +119,17 @@
       
       $this->_watermarkObject = new \Imagick($this->watermarkPath);
       return $this->_watermarkObject;
+    }
+  
+    // Return the storage object
+    public function getStorage()
+    {
+      if($this->_storage === null)
+      {
+        $this->_storage = $this->config['storage']['classname']::createFromToadstool($this);
+      }
+
+      return $this->_storage;
     }
 
 

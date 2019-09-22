@@ -311,6 +311,8 @@
       // Save
       $bigImage->writeImage($this->bigImagePath);
       chmod($this->bigImagePath, 0644);
+
+      $this->_parent->storage->write("big/{$this->_name}_big.jpeg", $this->bigImagePath);
     }
 
 

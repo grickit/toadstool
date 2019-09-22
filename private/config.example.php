@@ -35,5 +35,18 @@ return [
             'height' => '1333',
             'caption' => 'Two of my pet toads cuddling under dripping water.',
         ]
+    ],
+
+    'storage' => [
+        'classname' => '\Toadstool\AWSS3',
+        'basepath' => 'dev.toadstool/images',
+        'awss3' => [
+            'endpoint' => '',
+            'version' => 'latest',
+            'region' => 'nyc3',
+            'secret' => '',
+            'key' => '',
+            'bucket' => '',
+        ]
     ]
 ];
