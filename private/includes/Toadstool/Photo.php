@@ -189,8 +189,18 @@
     {
       if($this->_originObject !== null)
         return $this->_originObject;
+
+      // Origin image is on local disk
+      if($this->testOriginImagePath())
+      {
+        $this->_originObject = new \Imagick($this->originPath);
+        $this->_parent->storage->write("origin/{$this->_name}_origin.jpeg", $this->originPath);
+      }
+      elseif(false)
+      {
+
+      }
       
-      $this->_originObject = new \Imagick($this->_originPath);
       return $this->_originObject;
     }
 
