@@ -26,7 +26,7 @@
     10: hash
     11: size
     */
-    const NAMEREGEX = '#/(([0-9]{4})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})_([a-zA-Z0-9]+)_([A-Z0-9]+)_([A-Z0-9]+))_(preview|big|original)\.jpeg$#';
+    const NAMEREGEX = '#/(([0-9]{4})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})_([a-zA-Z0-9-]+)_([A-Z0-9]+)_([A-Z0-9]+))_(preview|big|original)\.jpeg$#';
 
 
     // Create a new Photo object if all we know is a filepath in the uploads folder
@@ -35,7 +35,9 @@
       $photo = new Photo();
       $photo->parent = $parent;
       $photo->originPath = $path;
-      $photo->category = preg_replace('/[^a-zA-Z0-9]/', '', $category);
+      $category = preg_replace('/[^a-zA-Z0-9 ]/', '', $category);
+      $category = preg_replace('/[ ]/', '-', $category);
+      $photo->category = $category;
 
       // Try to get the date the photo was taken
       if(($exifData = exif_read_data($path)) !== false && is_array($exifData) && isset($exifData['DateTimeOriginal']))
@@ -101,7 +103,7 @@
       if(preg_match(Photo::NAMEREGEX, $filename, $matches))
       {
         $this->name = $matches[1];
-        $this->category = $matches[8];
+        $this->category = preg_replace('/[-]/', ' ', $matches[8]);
         $this->date = "{$matches[2]}-{$matches[3]}-{$matches[4]}";
       }
       else
@@ -189,18 +191,8 @@
     {
       if($this->_originObject !== null)
         return $this->_originObject;
-
-      // Origin image is on local disk
-      if($this->testOriginImagePath())
-      {
-        $this->_originObject = new \Imagick($this->originPath);
-        $this->_parent->storage->write("origin/{$this->_name}_origin.jpeg", $this->originPath);
-      }
-      elseif(false)
-      {
-
-      }
       
+      $this->_originObject = new \Imagick($this->_originPath);
       return $this->_originObject;
     }
 
@@ -321,8 +313,6 @@
       // Save
       $bigImage->writeImage($this->bigImagePath);
       chmod($this->bigImagePath, 0644);
-
-      $this->_parent->storage->write("big/{$this->_name}_big.jpeg", $this->bigImagePath);
     }
 
 
@@ -352,7 +342,7 @@
 
 
     // Move the original upload file to the archive folder so that it isn't picked up on future runs through the uploads folder
-    public function archive()
+    public function archiveUpload()
     {
       // TODO: more errors!
       rename($this->_originPath, $this->archiveImagePath);

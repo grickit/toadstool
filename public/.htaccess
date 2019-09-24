@@ -1,7 +1,7 @@
  # use mod_rewrite for pretty URL support
 RewriteEngine on
 
-RewriteRule ^category/([A-Za-z0-9]+)$ /index.php?category=$1 [QSA,L]
+RewriteRule ^category/([A-Za-z0-9\ ]+)$ /index.php?category=$1 [QSA,L]
 
 RewriteRule ^process$ /index.php?process [L]
 

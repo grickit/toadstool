@@ -36,7 +36,7 @@
     if(isset($_GET['page']) && preg_match('/^([A-Za-z0-9]+)$/', $_GET['page']))
       $page = $_GET['page'];
 
-    if(isset($_GET['category']) && preg_match('/^([A-Za-z0-9]+)$/', $_GET['category']))
+    if(isset($_GET['category']) && preg_match('/^([A-Za-z0-9 ]+)$/', $_GET['category']))
     {
       $page = 'category';
       $category = $_GET['category'];

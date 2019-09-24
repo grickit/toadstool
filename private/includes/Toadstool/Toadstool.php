@@ -185,7 +185,7 @@
         // Load the uploaded image into a Photo object, create a thumbnail, and archive it
         $currentUpload = \Toadstool\Photo::createFromUploadImagePath($this, $fullPath, $category);
         $currentUpload->createPreviewImage();
-        $currentUpload->archive();
+        $currentUpload->archiveUpload();
       };
 
       // Locate all valid objects inside the main uploads directory
