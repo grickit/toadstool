@@ -284,7 +284,13 @@
     public function testPreviewImagePath()
     {
       return Photo::testImagePath($this->previewImagePath);
-    }    
+    }
+
+
+    public function testShipped()
+    {
+      return false;
+    }
 
 
     // Create and publish a big version of our image
@@ -347,6 +353,29 @@
       // TODO: more errors!
       rename($this->_originPath, $this->archiveImagePath);
       //chmod($this->archiveImagePath, 0644);
+      //$this->shipArchive();
+    }
+
+    public function shipArchive()
+    {
+      // TODO: this is only the happy path - more errors!
+
+      // If this photo has already been shipped, we don't want to do it again
+      if($this->testShipped() === true)
+        return true;
+
+      // We're about to offload the original image from the web server, so we better finish up anything we might need that for now
+      if($this->testPreviewImagePath() !== true)
+        $this->createPreviewImage();
+      
+      if($this->testBigImagePath() !== true)
+        $this->createBigImage();
+      
+      $this->_parent->storage->write("original/{$this->name}_original.jpeg", $this->archiveImagePath, false);
+      $this->_parent->storage->write("big/{$this->name}_big.jpeg", $this->bigImagePath, true);
+
+      unlink($this->archiveImagePath);
+      unlink($this->bigImagePath);
     }
   }
   
