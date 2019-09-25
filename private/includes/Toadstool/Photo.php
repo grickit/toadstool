@@ -226,11 +226,14 @@
       throw new \Exception('Asked for Photo date but did not have one.');
     }
 
+
+    // Returns formatted date
     public function getFancyDate()
     {
       $datetime = \DateTime::createFromFormat('Y-m-d', $this->date);
       return $datetime->format('F jS Y');
     }
+
 
     // Get the path to the big version of the image
     public function getBigImagePath()
@@ -287,8 +290,10 @@
     }
 
 
+    // Returns whether or not large files have been previously successfully shipped to external storage
     public function testShipped()
     {
+      // TODO: check if the original and big watermarked images exist in S3
       return false;
     }
 
@@ -353,9 +358,11 @@
       // TODO: more errors!
       rename($this->_originPath, $this->archiveImagePath);
       //chmod($this->archiveImagePath, 0644);
-      //$this->shipArchive();
+      $this->shipArchive();
     }
 
+
+    // Ships large files off to storage to save space on disk
     public function shipArchive()
     {
       // TODO: this is only the happy path - more errors!
@@ -371,11 +378,13 @@
       if($this->testBigImagePath() !== true)
         $this->createBigImage();
       
-      $this->_parent->storage->write("original/{$this->name}_original.jpeg", $this->archiveImagePath, false);
-      $this->_parent->storage->write("big/{$this->name}_big.jpeg", $this->bigImagePath, true);
+      // Ship and delete the original upload
+      if($this->_parent->storage->writeFile("original/{$this->name}_original.jpeg", $this->archiveImagePath, false))
+        unlink($this->archiveImagePath);
 
-      unlink($this->archiveImagePath);
-      unlink($this->bigImagePath);
+      // Ship and delete the big watermarked image
+      if($this->_parent->storage->writeFile("big/{$this->name}_big.jpeg", $this->bigImagePath, true))
+        unlink($this->bigImagePath);
     }
   }
   

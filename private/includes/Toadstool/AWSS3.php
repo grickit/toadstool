@@ -40,15 +40,70 @@
       throw new \Exception('Storage interface already has client. Cannot load again.');    
     }
 
-    public function write($name, $filepath)
+    // Returns whether or not a file exists and if it is an image
+    public function testFile($name)
     {
-      return $this->_client->putObject([
-        'Bucket' => $this->_parent->config['storage']['awss3']['bucket'],
-        'Key' => "{$this->_parent->config['storage']['basepath']}/$name",
-        'SourceFile' => $filepath,
-        'Content-Type' => 'image/jpeg',
-        'ACL' => 'public-read'
-      ]);
+      try
+      {
+        $result = $this->_client->getObject([
+          'Bucket' => $this->_parent->config['storage']['awss3']['bucket'],
+          'Key' => "{$this->_parent->config['storage']['basepath']}/$name"
+        ]);
+
+        return $result['ContentType'] === 'image/jpeg';
+      }
+      catch(Exception $e)
+      {
+        return false;
+      }
+
+      return false;
     }
 
+
+    // Returns a file from S3
+    public function getFile($name)
+    {
+      try
+      {
+        $result = $this->_client->getObject([
+          'Bucket' => $this->_parent->config['storage']['awss3']['bucket'],
+          'Key' => "{$this->_parent->config['storage']['basepath']}/$name"
+        ]);
+
+        return $result['Body'];
+      }
+      catch(Exception $e)
+      {
+        return false;
+      }
+
+      return false;
+    }
+
+    // Uploads a file to S3
+    public function writeFile($name, $filepath, $public = true)
+    {
+      try
+      {
+        $this->_client->putObject([
+          'Bucket' => $this->_parent->config['storage']['awss3']['bucket'],
+          'Key' => "{$this->_parent->config['storage']['basepath']}/$name",
+          'SourceFile' => $filepath,
+          'Content-Type' => 'image/jpeg',
+          'ACL' => ($public === true ? 'public-read' : 'private')
+        ]);
+
+        return true;
+      }
+      catch(Exception $e)
+      {
+        return false;
+      }
+    }
+
+    public function getPublicURL($name)
+    {
+
+    }
   }
