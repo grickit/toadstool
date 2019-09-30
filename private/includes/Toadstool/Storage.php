@@ -12,8 +12,6 @@
     public abstract function testFile($name);
     public abstract function getFile($name);
     public abstract function writeFile($name, $filepath, $public = true);
-    // public abstract function writeBlob($name, $blob, $public = true);
-    //public abstract function write($name, $filepath, $public = true);
 
     public static function createFromToadstool($parent)
     {

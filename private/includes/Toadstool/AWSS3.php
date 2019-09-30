@@ -100,6 +100,8 @@
       {
         return false;
       }
+
+      return false;
     }
 
     public function getPublicURL($name)
