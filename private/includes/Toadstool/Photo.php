@@ -293,8 +293,7 @@
     // Returns whether or not large files have been previously successfully shipped to external storage
     public function testShipped()
     {
-      // TODO: check if the original and big watermarked images exist in S3
-      return false;
+      return $this->_parent->storage->testFile("original/{$this->name}_original.jpeg");
     }
 
 

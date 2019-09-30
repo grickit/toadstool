@@ -50,9 +50,9 @@
           'Key' => "{$this->_parent->config['storage']['basepath']}/$name"
         ]);
 
-        return $result['ContentType'] === 'image/jpeg';
+        return ($result['ContentType'] === 'image/jpeg');
       }
-      catch(Exception $e)
+      catch(\Exception $e)
       {
         return false;
       }
@@ -73,7 +73,7 @@
 
         return $result['Body'];
       }
-      catch(Exception $e)
+      catch(\Exception $e)
       {
         return false;
       }
@@ -86,7 +86,7 @@
     {
       try
       {
-        $this->_client->putObject([
+        $result = $this->_client->putObject([
           'Bucket' => $this->_parent->config['storage']['awss3']['bucket'],
           'Key' => "{$this->_parent->config['storage']['basepath']}/$name",
           'SourceFile' => $filepath,
@@ -96,7 +96,7 @@
 
         return true;
       }
-      catch(Exception $e)
+      catch(\Exception $e)
       {
         return false;
       }
