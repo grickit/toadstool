@@ -50,6 +50,7 @@
           'Key' => "{$this->_parent->config['storage']['basepath']}/$name"
         ]);
 
+
         return ($result['ContentType'] === 'image/jpeg');
       }
       catch(\Exception $e)
@@ -102,10 +103,5 @@
       }
 
       return false;
-    }
-
-    public function getPublicURL($name)
-    {
-
     }
   }

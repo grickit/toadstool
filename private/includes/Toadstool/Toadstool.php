@@ -313,18 +313,30 @@
     {
       $photo = \Toadstool\Photo::createFromName($this, $name);
 
+      // Thumbnail was asked for but we somehow don't have it
       if($size === 'preview' && !$photo->testPreviewImagePath())
       {
         $photo->createPreviewImage();
         $filepath = $photo->previewImagePath;
       }
 
+      // Big was asked for, but we don't have it
       if($size === 'big' && !$photo->testBigImagePath())
       {
-        $photo->createBigImage();
-        $filepath = $photo->bigImagePath;
+        // We do have the original though, so make a big version
+        if($photo->testOriginImagePath())
+        {
+          $photo->createBigImage();
+          $filepath = $photo->bigImagePath;
+        }
+        // We must have shipped this to S3 already, so redirect
+        elseif($this->storage->testFile("big/{$photo->name}_big.jpeg")) {
+          header("Location: {$this->config['storage']['cdnpath']}/{$this->config['storage']['basepath']}/big/{$photo->name}_big.jpeg");
+          exit(0);
+        }
       }
-    
+
+      // We're serving a local file
       if(isset($filepath))
       {
         header('Content-Type: image/jpeg');
