@@ -64,6 +64,17 @@
     }
 
 
+    // Create a new Photo object if all we know is a filepath in the archive images folder
+    public static function createFromArchiveImagePath($parent, $path)
+    {
+      $photo = new Photo();
+      $photo->parent = $parent;
+      $photo->parseFilename($path);
+      $photo->originPath = $photo->archiveImagePath;
+      return $photo;
+    }
+
+
     // Create a new Photo object if all we know is a filepath in the preview images folder
     public static function createFromPreviewImagePath($parent, $path)
     {

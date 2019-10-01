@@ -215,6 +215,20 @@
     }
 
 
+    public function shipArchives()
+    {
+      $archiveObjects = $this->processDirectory($this->archiveImagesPath);
+
+      $count = 0;
+      foreach($archiveObjects['files'] as $currentArchiveObjectName => $currentArchiveObjectPath)
+      {
+        $currentPhoto = \Toadstool\Photo::createFromArchiveImagePath($this, $currentArchiveObjectPath);
+        $currentPhoto->shipArchive();
+        $count++;
+      }
+    }
+
+
     // Iterate through the preview folder and load all our photo objects
     protected function buildIndex()
     {

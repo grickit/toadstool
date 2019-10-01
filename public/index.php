@@ -45,8 +45,7 @@
     if(isset($_GET['offset']) && is_numeric($_GET['offset']))
       $offset = $_GET['offset'];
 
-    if(isset($_GET['process']))
-      $toadstool->processUploads();
+
 
 
     // Determmine what page to load
@@ -73,6 +72,20 @@
         throw new \Exception('Tried to visit nonexistent category.');
 
       $toadstool->render('pages/category', ['photos' => array_reverse($toadstool->index['categories'][$category]), 'offset' => $offset, 'category' => $category]);
+    }
+  
+    elseif($page === 'ship')
+    {
+      $toadstool->shipArchives();
+      header('Location: /');
+      exit(0);
+    }
+
+    elseif($page === 'upload')
+    {
+      $toadstool->processUploads();
+      header('Location: /');
+      exit(0);
     }
 
     // Something else?
