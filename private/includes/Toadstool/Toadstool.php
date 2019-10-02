@@ -222,6 +222,8 @@
       $count = 0;
       foreach($archiveObjects['files'] as $currentArchiveObjectName => $currentArchiveObjectPath)
       {
+        // Each photo only gets fifteen seconds to finish shipping, but does extend the max execution time by that much
+        set_time_limit(15);
         $currentPhoto = \Toadstool\Photo::createFromArchiveImagePath($this, $currentArchiveObjectPath);
         $currentPhoto->shipArchive();
         $count++;
