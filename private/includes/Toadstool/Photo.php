@@ -368,7 +368,6 @@
       // TODO: more errors!
       rename($this->_originPath, $this->archiveImagePath);
       //chmod($this->archiveImagePath, 0644);
-      $this->shipArchive();
     }
 
 
