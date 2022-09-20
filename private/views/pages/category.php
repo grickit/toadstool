@@ -1,16 +1,22 @@
 <div class="gallery">
 <?php
+/**
+ * Variables from render caller
+ * @var int $offset
+ * @var array $photos
+ * @var string $category
+ */
   $limit = 24;
   $renderPrevious = false;
   $renderNext = false;
+  $nextOffset = null;
+  $previousOffset = null;
 
   if($offset > 0)
   {
     $renderPrevious = true;
     if($offset > $limit)
       $previousOffset = ($offset - $limit);
-    elseif($offset != 0)
-      $previousOffset = 0;
   }
 
   if(count($photos) >= $offset+$limit)
