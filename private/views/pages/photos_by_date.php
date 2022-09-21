@@ -26,6 +26,10 @@
     $renderNext = true;
     $nextOffset = $offset+$limit;
   }
+  else
+  {
+      $limit = count($photos);
+  }
 ?>
 <div class="floating-controls">
 <?php $this->renderPartial('fragments/pagination', ['page' => 'latest', 'renderNext' => $renderNext, 'renderPrevious' => $renderPrevious, 'nextOffset' => $nextOffset, 'previousOffset' => $previousOffset]); ?>
