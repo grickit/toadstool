@@ -57,8 +57,6 @@
       {
         return false;
       }
-
-      return false;
     }
 
 
@@ -78,8 +76,6 @@
       {
         return false;
       }
-
-      return false;
     }
 
     // Uploads a file to S3
@@ -101,7 +97,5 @@
       {
         return false;
       }
-
-      return false;
     }
   }
