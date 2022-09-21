@@ -13,6 +13,9 @@
     echo '<p>';
     echo $exception->getMessage();
     echo '</p>';
+    echo '<p>';
+    echo "{$exception->getFile()}:{$exception->getLine()}";
+    echo '</p>';
     echo '</div>';
   });
 
